@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montnexus — Full-Service AI Agency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'ClashDisplay';
+      src: url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&display=swap');
+    }
+  </style>
+  <!-- Fontshare Clash Display -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&f[]=cabinet-grotesk@300,400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #22c55e;
+    --green-dim: #16a34a;
+    --green-glow: rgba(34,197,94,0.18);
+    --black: #09090b;
+    --dark: #111113;
+    --dark2: #18181b;
+    --white: #f8fafc;
+    --gray: #71717a;
+    --gray-light: #a1a1aa;
+    --border: rgba(255,255,255,0.07);
+    --border-light: rgba(0,0,0,0.08);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    background: #f4f4f5;
+    color: #18181b;
+    overflow-x: hidden;
+  }
+
+  /* ── UTILS ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,0.06); border-radius: 99px;
+    padding: 5px 14px; font-size: 13px; font-weight: 500; color: #52525b;
+  }
+  .pill span { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; }
+  .pill-dark {
+    background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.75);
+  }
+  .pill-dark span { background: var(--green); }
+
+  h1,h2,h3,h4 { font-family: 'ClashDisplay', sans-serif; }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 99px;
+    padding: 10px 10px 10px 20px;
+    display: flex; align-items: center; gap: 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    white-space: nowrap;
+  }
+  .nav-logo {
+    font-family: 'ClashDisplay', sans-serif; font-weight: 800; font-size: 17px;
+    color: #09090b; text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-size: 14px; color: #52525b; text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: #09090b; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .btn-primary {
+    background: #09090b; color: #fff;
+    border: none; border-radius: 99px; padding: 10px 22px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    transition: background .2s, transform .15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: #27272a; transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: #09090b;
+    border: 1.5px solid rgba(0,0,0,0.15); border-radius: 99px; padding: 9px 20px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    transition: border-color .2s, background .2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: #09090b; background: rgba(0,0,0,0.03); }
+  .btn-dark {
+    background: #09090b; color: #fff;
+    border: none; border-radius: 99px; padding: 12px 28px;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    transition: background .2s, transform .15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-dark:hover { background: #27272a; transform: translateY(-1px); }
+  .btn-light {
+    background: #fff; color: #09090b;
+    border: none; border-radius: 99px; padding: 12px 28px;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    transition: background .2s, transform .15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-light:hover { background: #f4f4f5; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 120px 24px 60px;
+    position: relative; overflow: hidden;
+    background: #f4f4f5;
+  }
+  .hero-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .hero-content { text-align: center; max-width: 820px; position: relative; z-index: 2; }
+  .hero-badge { margin-bottom: 28px; }
+  .hero-badge .dot-live {
+    display: inline-block; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 0 0 rgba(34,197,94,0.5);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  }
+  .hero-title {
+    font-size: clamp(40px, 7vw, 80px);
+    font-weight: 800; line-height: 1.08;
+    color: #09090b; letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    font-size: 18px; color: #71717a; max-width: 540px;
+    margin: 0 auto 40px; line-height: 1.6; font-weight: 400;
+  }
+  .hero-cta {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .hero-founder {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: #52525b;
+  }
+  .hero-founder img {
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 2px solid #fff; object-fit: cover;
+  }
+  .founder-status {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #a1a1aa;
+  }
+  .founder-status span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+
+
+  /* Portfolio preview cards at bottom of hero */
+  .hero-previews {
+    display: flex; gap: 16px; margin-top: 60px;
+    overflow: hidden; max-width: 900px; width: 100%;
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+  .preview-card {
+    background: #fff; border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.06);
+    overflow: hidden; flex-shrink: 0; width: 300px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  }
+  .preview-card-header {
+    padding: 10px 14px; display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .dot-row { display: flex; gap: 5px; }
+  .dot-row span { width: 9px; height: 9px; border-radius: 50%; }
+  .dot-row span:nth-child(1) { background: #f87171; }
+  .dot-row span:nth-child(2) { background: #fbbf24; }
+  .dot-row span:nth-child(3) { background: var(--green); }
+  .preview-card-body { padding: 14px; min-height: 90px; font-size: 12px; color: #71717a; }
+  .preview-card-body strong { font-family: 'ClashDisplay', sans-serif; font-size: 14px; color: #09090b; display: block; margin-bottom: 6px; }
+
+  /* ── LOGOS MARQUEE ── */
+  .logos-section {
+    background: #fff; padding: 32px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .logos-track {
+    display: flex; gap: 64px; align-items: center;
+    animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .logo-item {
+    font-family: 'ClashDisplay', sans-serif; font-weight: 700;
+    font-size: 15px; color: #c4c4c4; letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* ── SERVICES BENTO ── */
+  #services {
+    background: var(--black);
+    padding: 100px 24px;
+  }
+  .services-inner { max-width: 1100px; margin: 0 auto; }
+  .services-header { text-align: center; margin-bottom: 60px; }
+
+  .svc-bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .svc-big { grid-row: span 2; }
+  .svc-wide { grid-column: span 2; }
+
+  .svc-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    display: flex; flex-direction: column; gap: 14px;
+    transition: border-color .3s, transform .3s;
+    overflow: hidden;
+  }
+  .svc-card:hover { border-color: rgba(34,197,94,0.3); transform: translateY(-3px); }
+  .svc-card-top { display: flex; align-items: center; justify-content: space-between; }
+  .svc-number {
+    font-family: 'ClashDisplay', sans-serif; font-size: 12px; font-weight: 600;
+    color: var(--green); letter-spacing: 0.1em;
+  }
+  .svc-tag {
+    font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.06); border-radius: 99px;
+    padding: 3px 10px; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .svc-title {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: clamp(22px, 2.5vw, 30px); font-weight: 700;
+    color: #fff; letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .svc-desc { font-size: 14px; color: #71717a; line-height: 1.65; flex: 1; }
+  .svc-features { display: flex; flex-wrap: wrap; gap: 6px; }
+  .svc-features span {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 99px; padding: 4px 12px;
+  }
+  .svc-btn {
+    display: inline-block; text-decoration: none;
+    font-size: 13px; font-weight: 600; color: var(--green);
+    transition: opacity .2s;
+  }
+  .svc-btn:hover { opacity: 0.7; }
+  .svc-visual { margin-top: 8px; border-radius: 14px; overflow: hidden; }
+  .browser-mock { background: #0d0d0f; border: 1px solid rgba(255,255,255,0.08); }
+  .browser-bar {
+    background: #1a1a1f; padding: 8px 14px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .b-dots { display: flex; gap: 5px; }
+  .b-dots span { width: 8px; height: 8px; border-radius: 50%; }
+  .b-dots span:nth-child(1) { background: #f87171; }
+  .b-dots span:nth-child(2) { background: #fbbf24; }
+  .b-dots span:nth-child(3) { background: var(--green); }
+  .b-url { font-size: 11px; color: rgba(255,255,255,0.25); font-family: monospace; }
+  .browser-body { padding: 16px; }
+  .code-mock {
+    background: #0d0d0f; border: 1px solid rgba(255,255,255,0.06);
+    padding: 16px; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.7;
+  }
+  .code-line { white-space: nowrap; }
+  .c-purple { color: #c084fc; } .c-green { color: var(--green); }
+  .c-blue { color: #60a5fa; } .c-yellow { color: #fbbf24; }
+  .c-white { color: rgba(255,255,255,0.85); } .c-gray { color: rgba(255,255,255,0.35); }
+  .flow-mock {
+    background: #0d0d0f; border: 1px solid rgba(255,255,255,0.06);
+    padding: 16px; display: flex; align-items: center; gap: 8px; justify-content: center; flex-wrap: wrap;
+  }
+  .flow-node {
+    text-align: center; font-size: 11px; font-weight: 600; color: #fff;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 8px 12px; line-height: 1.4;
+  }
+  .flow-node.trigger { border-color: rgba(34,197,94,0.4); color: var(--green); }
+  .flow-node.done { border-color: rgba(96,165,250,0.4); color: #60a5fa; }
+  .flow-node small { display: block; font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.35); }
+  .flow-arrow { color: rgba(255,255,255,0.25); font-size: 18px; }
+  .stats-mock {
+    background: #0d0d0f; border: 1px solid rgba(255,255,255,0.06);
+    padding: 16px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .stat-row { display: flex; align-items: center; gap: 10px; }
+  .stat-r-label { font-size: 11px; color: rgba(255,255,255,0.4); width: 32px; flex-shrink: 0; }
+  .stat-r-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+  .stat-r-fill { height: 100%; background: var(--green); border-radius: 99px; }
+  .stat-r-val { font-size: 12px; font-weight: 600; color: #fff; width: 40px; text-align: right; flex-shrink: 0; }
+
+  @media (max-width: 760px) {
+    .svc-bento { grid-template-columns: 1fr; }
+    .svc-big { grid-row: span 1; }
+    .svc-wide { grid-column: span 1; }
+  }
+
+  /* ── WHY US ── */
+  #why {
+    background: #f4f4f5; padding: 100px 24px;
+  }
+  .why-inner { max-width: 1000px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-title {
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 800; color: #09090b;
+    letter-spacing: -0.02em; line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .section-sub { font-size: 16px; color: #71717a; }
+  .why-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto; gap: 16px;
+  }
+  .why-card {
+    background: #fff; border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 28px; overflow: hidden; position: relative;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .why-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+  .why-card h3 { font-family: 'ClashDisplay', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .why-card p { font-size: 14px; color: #71717a; line-height: 1.6; max-width: 260px; }
+  .why-card.big { grid-column: span 1; grid-row: span 1; }
+  /* card visuals */
+  .card-visual {
+    margin-top: 20px; background: #f4f4f5; border-radius: 12px;
+    padding: 16px; font-size: 13px; color: #71717a;
+  }
+  .planning-steps { display: flex; flex-direction: column; gap: 8px; }
+  .planning-step {
+    background: #fff; border-radius: 8px; padding: 8px 12px;
+    font-size: 13px; font-weight: 500; color: #27272a;
+    border: 1px solid rgba(0,0,0,0.06); display: inline-block;
+  }
+  .planning-step.highlight { background: #09090b; color: #fff; border-color: #09090b; }
+  .gauge-container { text-align: center; margin-top: 12px; }
+  .gauge-num { font-family: 'ClashDisplay', sans-serif; font-size: 42px; font-weight: 800; color: #09090b; }
+  .gauge-label { font-size: 12px; color: #a1a1aa; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 70px; margin-top: 12px; }
+  .bar {
+    flex: 1; background: #e4e4e7; border-radius: 6px 6px 0 0;
+    transition: background .3s;
+  }
+  .bar.active { background: var(--green); }
+  .bar-labels { display: flex; justify-content: space-around; font-size: 10px; color: #a1a1aa; margin-top: 4px; }
+
+  /* ── HOW IT WORKS ── */
+  #how {
+    background: #09090b;
+    padding: 100px 24px;
+    overflow: hidden;
+  }
+  .how-inner { max-width: 900px; margin: 0 auto; }
+  .how-header { margin-bottom: 80px; }
+  .how-header .pill-dark { margin-bottom: 16px; }
+  .how-header h2 {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 700;
+    color: #fff; letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .how-header p { font-size: 16px; color: #52525b; margin-top: 10px; max-width: 400px; }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 27px; top: 0; bottom: 0; width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(34,197,94,0.3) 10%, rgba(34,197,94,0.3) 90%, transparent);
+  }
+
+  .tl-item {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 28px;
+    padding-bottom: 56px;
+    position: relative;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+
+  /* The dot on the line */
+  .tl-dot {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #18181b;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative; z-index: 1;
+    transition: border-color .3s, background .3s;
+  }
+  .tl-item:hover .tl-dot {
+    border-color: var(--green);
+    background: rgba(34,197,94,0.08);
+  }
+  .tl-dot-num {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    transition: color .3s;
+  }
+  .tl-item:hover .tl-dot-num { color: var(--green); }
+
+  /* Content box */
+  .tl-content {
+    background: #18181b;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 28px 32px;
+    transition: border-color .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tl-item:hover .tl-content { border-color: rgba(34,197,94,0.2); }
+
+  /* Subtle corner accent */
+  .tl-content::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle at top right, rgba(34,197,94,0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .tl-top {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 10px;
+  }
+  .tl-label {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: 20px; font-weight: 700; color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .tl-tag {
+    font-size: 11px; color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 99px; padding: 3px 10px;
+  }
+  .tl-desc {
+    font-size: 14px; color: #52525b; line-height: 1.7; margin-bottom: 20px;
+  }
+  /* Mini detail chips inside each card */
+  .tl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tl-chip {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px; padding: 4px 10px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .tl-chip-dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .timeline::before { left: 20px; }
+    .tl-dot { width: 42px; height: 42px; }
+    .tl-item { grid-template-columns: 42px 1fr; gap: 16px; }
+    .tl-content { padding: 20px; }
+  }
+
+  
+  #testimonials {
+    background: #fff; padding: 100px 24px;
+  }
+  .testi-inner { max-width: 1100px; margin: 0 auto; }
+  .testi-marquee {
+    overflow: hidden; margin-top: 60px;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+  .testi-track {
+    display: flex; gap: 20px;
+    animation: marquee 28s linear infinite;
+    width: max-content;
+  }
+  .testi-card {
+    background: #f4f4f5; border-radius: 16px;
+    padding: 22px; width: 300px; flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .testi-card:nth-child(even) { background: #fff; border-color: rgba(0,0,0,0.06); }
+  .testi-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .testi-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #d4d4d8, #a1a1aa);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .testi-name { font-weight: 600; font-size: 14px; color: #09090b; }
+  .testi-role { font-size: 12px; color: #a1a1aa; }
+  .testi-text { font-size: 14px; color: #52525b; line-height: 1.6; }
+
+  /* ── FEATURED QUOTE ── */
+  .featured-quote {
+    text-align: center; padding: 80px 24px;
+    max-width: 760px; margin: 0 auto;
+  }
+  .featured-quote blockquote {
+    font-family: 'ClashDisplay', sans-serif; font-size: clamp(20px, 3vw, 28px);
+    font-weight: 600; color: #09090b; line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+  .featured-quote .highlight { color: var(--green-dim); }
+  .quote-author {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin-top: 24px;
+  }
+  .quote-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #d4d4d8, #a1a1aa);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .quote-name { font-weight: 600; font-size: 15px; }
+  .quote-title { font-size: 13px; color: #71717a; }
+
+  /* ── WHO WE ARE ── */
+  #about {
+    background: #f4f4f5;
+    padding: 100px 24px;
+    overflow: hidden;
+  }
+  .about-inner { max-width: 1050px; margin: 0 auto; }
+
+  /* Split header — big left title, descriptor right */
+  .about-split-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px; align-items: end;
+    margin-bottom: 64px;
+  }
+  .about-headline {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: clamp(38px, 5.5vw, 64px);
+    font-weight: 800; color: #09090b;
+    letter-spacing: -0.03em; line-height: 1.0;
+  }
+  .about-headline em {
+    font-style: normal; color: var(--green-dim);
+  }
+  .about-header-right { padding-bottom: 6px; }
+  .about-header-right p {
+    font-size: 15px; color: #71717a; line-height: 1.7; max-width: 340px;
+  }
+
+  /* Main asymmetric layout */
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  /* Manifesto card — spans rows */
+  .about-manifesto {
+    grid-row: span 2;
+    background: #09090b;
+    border-radius: 24px;
+    padding: 44px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    min-height: 480px;
+    position: relative; overflow: hidden;
+  }
+  .about-manifesto::before {
+    content: '';
+    position: absolute; bottom: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(34,197,94,0.12), transparent 70%);
+    pointer-events: none;
+  }
+  .manifesto-eyebrow {
+    font-size: 11px; font-weight: 600; color: var(--green);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px;
+  }
+  .manifesto-text {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 600; color: #fff;
+    line-height: 1.5; letter-spacing: -0.01em;
+    flex: 1; margin-bottom: 36px;
+  }
+  .manifesto-text strong { color: var(--green); font-weight: 700; }
+  .manifesto-footer {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .manifesto-stat {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+  }
+  .manifesto-stat-val {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: 22px; font-weight: 800; color: var(--green);
+    min-width: 56px;
+  }
+  .manifesto-stat-label { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+  /* Stack card */
+  .about-stack {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 28px;
+  }
+  .about-card-label {
+    font-size: 11px; font-weight: 600; color: #a1a1aa;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .stack-scroll {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .stack-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    background: #f4f4f5; border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: background .2s, transform .2s;
+    cursor: default;
+  }
+  .stack-row:hover { background: #ebebec; transform: translateX(4px); }
+  .stack-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; flex-shrink: 0;
+  }
+  .stack-name { font-size: 13px; font-weight: 600; color: #27272a; flex: 1; }
+  .stack-use { font-size: 11px; color: #a1a1aa; }
+
+  @media (max-width: 800px) {
+    .about-split-header { grid-template-columns: 1fr; gap: 16px; }
+    .about-layout { grid-template-columns: 1fr; }
+    .about-manifesto { grid-row: span 1; min-height: auto; }
+  }
+
+  /* ── FAQ ── */
+  #faq { background: #fff; padding: 100px 24px; }
+  .faq-inner { max-width: 700px; margin: 0 auto; }
+  .faq-list { margin-top: 60px; display: flex; flex-direction: column; gap: 2px; }
+  .faq-item {
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%; background: none; border: none;
+    text-align: left; padding: 20px 0;
+    font-family: 'ClashDisplay', sans-serif; font-size: 16px; font-weight: 600;
+    color: #09090b; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: color .2s;
+  }
+  .faq-q:hover { color: #27272a; }
+  .faq-arrow { transition: transform .3s; color: #a1a1aa; font-size: 20px; }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    font-size: 15px; color: #71717a; line-height: 1.7;
+    transition: max-height .35s ease, padding .3s;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+
+  /* ── FOOTER / CTA ── */
+  #contact {
+    background: #f4f4f5; padding: 100px 24px 60px;
+    text-align: center;
+  }
+  .contact-inner { max-width: 700px; margin: 0 auto; }
+  .team-avatars {
+    display: flex; justify-content: center; align-items: flex-end;
+    gap: -10px; margin-bottom: 28px;
+  }
+  .team-av {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 3px solid #f4f4f5;
+    background: linear-gradient(135deg, #d4d4d8, #a1a1aa);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: #fff;
+    margin-left: -12px;
+    position: relative;
+  }
+  .team-av:first-child { margin-left: 0; }
+  .team-av:nth-child(3) { width: 62px; height: 62px; z-index: 2; font-size: 18px; }
+  .social-row {
+    display: flex; justify-content: center; gap: 12px; margin-bottom: 36px; margin-top: 16px;
+  }
+  .social-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #fff; border: 1.5px solid rgba(0,0,0,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer; text-decoration: none;
+    transition: border-color .2s, background .2s;
+  }
+  .social-btn:hover { background: #09090b; border-color: #09090b; }
+  .social-btn:hover svg { color: #fff; fill: #fff; }
+  .contact-email {
+    font-family: 'ClashDisplay', sans-serif;
+    font-size: clamp(28px, 5vw, 56px);
+    font-weight: 800; color: #09090b; letter-spacing: -0.02em;
+    text-decoration: none; display: block; margin-bottom: 16px;
+    transition: color .2s;
+    border-bottom: 2px dashed rgba(0,0,0,0.15); padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .contact-email:hover { color: var(--green-dim); }
+  .footer-desc { font-size: 14px; color: #a1a1aa; max-width: 500px; margin: 0 auto 32px; line-height: 1.6; }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: #a1a1aa; padding-top: 24px;
+    border-top: 1px solid rgba(0,0,0,0.08); flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { color: #a1a1aa; text-decoration: none; }
+  .footer-links a:hover { color: #71717a; }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+
+    .why-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .steps-row { grid-template-columns: 1fr; }
+    nav { gap: 16px; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero-previews { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    Montnexus
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    
+    
+    
+    <li><a href="#about">About</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#contact" class="btn-primary">Book a call</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-grid"></div>
+
+  <div class="hero-content reveal">
+    <h1 class="hero-title">AI-powered digital solutions<br>to boost your growth</h1>
+    <p class="hero-sub">Automate your workflows, build intelligent websites, and scale your business with a team that understands AI — from strategy to deployment.</p>
+    <div class="hero-cta">
+      <div class="hero-founder">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;">A</div>
+        <div>
+          <div style="font-weight:600;font-size:14px;color:#09090b;">Abdul Razik</div>
+          <div class="founder-status"><span></span> Online</div>
+        </div>
+      </div>
+      <a href="#contact" class="btn-dark">Book a 15-min call</a>
+    </div>
+  </div>
+
+  <!-- Preview cards at bottom -->
+  <div class="hero-previews reveal reveal-delay-2">
+    <div class="preview-card">
+      <div class="preview-card-header"><div class="dot-row"><span></span><span></span><span></span></div></div>
+      <div class="preview-card-body"><strong>SaaS Platform</strong>AI dashboard with live analytics, user management &amp; billing integrations</div>
+    </div>
+    <div class="preview-card">
+      <div class="preview-card-header"><div class="dot-row"><span></span><span></span><span></span></div></div>
+      <div class="preview-card-body"><strong>E-commerce AI</strong>Smart product recommendations, chatbot support &amp; conversion optimization</div>
+    </div>
+    <div class="preview-card">
+      <div class="preview-card-header"><div class="dot-row"><span></span><span></span><span></span></div></div>
+      <div class="preview-card-body"><strong>Lead Generation</strong>Automated funnels, AI-powered copywriting &amp; CRM integrations</div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos-section">
+  <div class="logos-track">
+    <span class="logo-item">TECHFLOW</span>
+    <span class="logo-item">DATANEXUS</span>
+    <span class="logo-item">ISOLATECH</span>
+    <span class="logo-item">LÜM HOME</span>
+    <span class="logo-item">CLOUDBASE</span>
+    <span class="logo-item">meubleprive.fr</span>
+    <span class="logo-item">ORBITAI</span>
+    <span class="logo-item">SYNAPTIC</span>
+    <!-- duplicate for seamless loop -->
+    <span class="logo-item">TECHFLOW</span>
+    <span class="logo-item">DATANEXUS</span>
+    <span class="logo-item">ISOLATECH</span>
+    <span class="logo-item">LÜM HOME</span>
+    <span class="logo-item">CLOUDBASE</span>
+    <span class="logo-item">meubleprive.fr</span>
+    <span class="logo-item">ORBITAI</span>
+    <span class="logo-item">SYNAPTIC</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-inner">
+    <div class="services-header reveal">
+      <span class="pill pill-dark"><span></span> Services</span>
+      <h2 style="font-family:'ClashDisplay',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:700;color:#fff;margin-top:16px;letter-spacing:-0.02em;">What we build for you</h2>
+      <p style="color:#71717a;font-size:16px;margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;">End-to-end digital solutions — from intelligent websites to fully automated AI systems.</p>
+    </div>
+
+    <div class="svc-bento">
+
+      <!-- BIG CARD: Website Design -->
+      <div class="svc-card svc-big reveal">
+        <div class="svc-card-top">
+          <div class="svc-number">01</div>
+          <div class="svc-tag">Design</div>
+        </div>
+        <h3 class="svc-title">Website Design</h3>
+        <p class="svc-desc">High-converting, user-friendly websites built on Webflow or Framer — crafted to look stunning and drive real results.</p>
+        <div class="svc-features">
+          <span>UI/UX Design</span><span>Webflow Dev</span><span>Framer</span><span>CRO</span>
+        </div>
+        <a href="#contact" class="svc-btn">Get a strategy call →</a>
+        <!-- mock browser visual -->
+        <div class="svc-visual browser-mock">
+          <div class="browser-bar"><div class="b-dots"><span></span><span></span><span></span></div><div class="b-url">montnexus.io/project</div></div>
+          <div class="browser-body">
+            <div class="b-hero-line" style="width:60%;height:14px;background:rgba(255,255,255,0.15);border-radius:4px;margin-bottom:8px;"></div>
+            <div class="b-hero-line" style="width:40%;height:10px;background:rgba(255,255,255,0.08);border-radius:4px;margin-bottom:16px;"></div>
+            <div style="display:flex;gap:6px;">
+              <div style="flex:1;height:50px;background:rgba(34,197,94,0.2);border-radius:6px;border:1px solid rgba(34,197,94,0.3);"></div>
+              <div style="flex:1;height:50px;background:rgba(255,255,255,0.05);border-radius:6px;"></div>
+              <div style="flex:1;height:50px;background:rgba(255,255,255,0.05);border-radius:6px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD: AI Development -->
+      <div class="svc-card reveal reveal-delay-1">
+        <div class="svc-card-top">
+          <div class="svc-number">02</div>
+          <div class="svc-tag">AI</div>
+        </div>
+        <h3 class="svc-title">AI Development</h3>
+        <p class="svc-desc">Custom AI integrations that plug into your stack — intelligent dashboards, automated pipelines, and smart APIs.</p>
+        <div class="svc-features">
+          <span>GPT-4 / Claude</span><span>Custom APIs</span><span>Dashboards</span>
+        </div>
+        <a href="#contact" class="svc-btn">Discuss a project →</a>
+        <!-- code snippet visual -->
+        <div class="svc-visual code-mock">
+          <div class="code-line"><span class="c-purple">const</span> <span class="c-white">agent</span> <span class="c-gray">=</span> <span class="c-green">await</span> <span class="c-white">AI</span><span class="c-gray">.</span><span class="c-blue">create</span><span class="c-gray">(&#123;</span></div>
+          <div class="code-line" style="padding-left:16px;"><span class="c-gray">model:</span> <span class="c-yellow">"gpt-4o"</span><span class="c-gray">,</span></div>
+          <div class="code-line" style="padding-left:16px;"><span class="c-gray">tools:</span> <span class="c-green">[crm, analytics]</span></div>
+          <div class="code-line"><span class="c-gray">&#125;);</span></div>
+          <div class="code-line" style="margin-top:6px;"><span class="c-green">✓</span> <span class="c-gray" style="font-size:11px;">Agent deployed successfully</span></div>
+        </div>
+      </div>
+
+      <!-- CARD: AI Agents -->
+      <div class="svc-card reveal reveal-delay-2">
+        <div class="svc-card-top">
+          <div class="svc-number">03</div>
+          <div class="svc-tag">Automation</div>
+        </div>
+        <h3 class="svc-title">AI Agents</h3>
+        <p class="svc-desc">Autonomous agents that handle support, lead qualification, data enrichment, and internal tasks — 24/7 without breaks.</p>
+        <div class="svc-features">
+          <span>Workflows</span><span>CRM Sync</span><span>24/7 Run</span>
+        </div>
+        <a href="#contact" class="svc-btn">Build your agent →</a>
+        <!-- flow visual -->
+        <div class="svc-visual flow-mock">
+          <div class="flow-node trigger">Trigger<br><small>New lead</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node process">AI Agent<br><small>Qualifies</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node done">CRM<br><small>Updated</small></div>
+        </div>
+      </div>
+
+      <!-- WIDE CARD: Marketing -->
+      <div class="svc-card svc-wide reveal reveal-delay-1">
+        <div class="svc-card-top">
+          <div class="svc-number">04</div>
+          <div class="svc-tag">Growth</div>
+        </div>
+        <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <h3 class="svc-title">Marketing &amp; Ads</h3>
+            <p class="svc-desc">AI-powered ad campaigns that maximize your ROI across Google, Meta, and beyond with precision targeting.</p>
+            <div class="svc-features">
+              <span>Google Ads</span><span>Meta Ads</span><span>AI Targeting</span><span>Analytics</span>
+            </div>
+            <a href="#contact" class="svc-btn">Schedule a call →</a>
+          </div>
+          <!-- mini stats visual -->
+          <div class="svc-visual stats-mock" style="min-width:200px;flex:1;">
+            <div class="stat-row"><div class="stat-r-label">ROAS</div><div class="stat-r-bar"><div class="stat-r-fill" style="width:84%"></div></div><div class="stat-r-val">4.8x</div></div>
+            <div class="stat-row"><div class="stat-r-label">CTR</div><div class="stat-r-bar"><div class="stat-r-fill" style="width:62%"></div></div><div class="stat-r-val">6.2%</div></div>
+            <div class="stat-row"><div class="stat-r-label">CVR</div><div class="stat-r-bar"><div class="stat-r-fill" style="width:45%"></div></div><div class="stat-r-val">2.5%</div></div>
+            <div class="stat-row"><div class="stat-r-label">CPA</div><div class="stat-r-bar"><div class="stat-r-fill" style="width:30%;background:#22c55e55;"></div></div><div class="stat-r-val" style="color:#22c55e;">↓ 38%</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="why-inner">
+    <div class="section-header reveal">
+      <span class="pill"><span></span> Why Montnexus</span>
+      <h2 class="section-title" style="margin-top:16px;">Smart choices start here</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal reveal-delay-1">
+        <h3>Tailored AI Strategies</h3>
+        <p>Every project is built around your specific business goals — no templates, no guesswork.</p>
+        <div class="card-visual">
+          <div class="planning-steps">
+            <span class="planning-step">Business goal analysis</span>
+            <span class="planning-step highlight">Custom AI development</span>
+            <span class="planning-step">User experience optimization</span>
+            <span class="planning-step">Performance tracking</span>
+          </div>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <h3>End-to-End Support</h3>
+        <p>From planning to post-launch, we stay by your side every step of the way.</p>
+        <div class="card-visual">
+          <div class="planning-steps" style="flex-direction:row;flex-wrap:wrap;gap:8px;">
+            <span class="planning-step">Planning</span>
+            <span class="planning-step highlight">Launch</span>
+            <span class="planning-step">Support</span>
+          </div>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-1">
+        <h3>Results-Driven Approach</h3>
+        <p>Our focus is on delivering measurable results through high-converting websites and impactful AI systems.</p>
+        <div class="gauge-container">
+          <div class="gauge-num">48%</div>
+          <div class="gauge-label">Average increase in qualified leads</div>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <h3>Proven Success</h3>
+        <p>We've helped brands grow their digital presence and achieve measurable success. Let us help you do the same.</p>
+        <div class="card-visual">
+          <div class="bar-chart">
+            <div class="bar" style="height:40%"></div>
+            <div class="bar" style="height:55%"></div>
+            <div class="bar active" style="height:70%"></div>
+            <div class="bar active" style="height:90%"></div>
+          </div>
+          <div class="bar-labels"><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-inner">
+
+    <div class="how-header reveal">
+      <span class="pill pill-dark"><span></span> How it works</span>
+      <h2>From idea to<br>live product.</h2>
+      <p>A clear, transparent process — no surprises, no handoff chaos.</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"><span class="tl-dot-num">01</span></div>
+        <div class="tl-content">
+          <div class="tl-top">
+            <span class="tl-label">Discovery Call</span>
+            <span class="tl-tag">Day 1</span>
+          </div>
+          <p class="tl-desc">We sit down with you — virtually or async — and dig into your goals, current setup, and what success actually looks like. No sales pitch, just honest conversation.</p>
+          <div class="tl-chips">
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Goal mapping</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Tech audit</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Scope definition</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Timeline estimate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-1">
+        <div class="tl-dot"><span class="tl-dot-num">02</span></div>
+        <div class="tl-content">
+          <div class="tl-top">
+            <span class="tl-label">Strategy & Design</span>
+            <span class="tl-tag">Week 1</span>
+          </div>
+          <p class="tl-desc">We map out the architecture — wireframes, AI workflow diagrams, or ad strategy depending on what you need. You see it before we build it, and you approve every direction.</p>
+          <div class="tl-chips">
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Wireframes</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>AI system design</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Brand alignment</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Feedback loop</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-2">
+        <div class="tl-dot"><span class="tl-dot-num">03</span></div>
+        <div class="tl-content">
+          <div class="tl-top">
+            <span class="tl-label">Build & Integrate</span>
+            <span class="tl-tag">Weeks 2–4</span>
+          </div>
+          <p class="tl-desc">We build — clean code, no shortcuts. Whether it's a Webflow site, an AI agent pipeline, or a full-stack app, we keep you in the loop with regular updates and staging previews.</p>
+          <div class="tl-chips">
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Development sprints</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>API integrations</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Staging previews</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Iteration rounds</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-3">
+        <div class="tl-dot"><span class="tl-dot-num">04</span></div>
+        <div class="tl-content">
+          <div class="tl-top">
+            <span class="tl-label">Launch & Handover</span>
+            <span class="tl-tag">Go live</span>
+          </div>
+          <p class="tl-desc">We launch, hand everything over clean — documented, organised, and yours. We don't disappear after delivery; we stay available for questions, fixes, and future work.</p>
+          <div class="tl-chips">
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Full handover docs</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Live deployment</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Post-launch support</span>
+            <span class="tl-chip"><span class="tl-chip-dot"></span>Performance check</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- WHO WE ARE -->
+<section id="about">
+  <div class="about-inner">
+
+    <div class="about-split-header reveal">
+      <h2 class="about-headline">We're students.<br>We build <em>real</em><br>things.</h2>
+      <div class="about-header-right">
+        <span class="pill" style="margin-bottom:14px;display:inline-flex;"><span></span> Who we are</span>
+        <p>Montnexus is a startup run by AI & Computer Science students — combining academic depth with professional tools to build digital products from the ground up.</p>
+      </div>
+    </div>
+
+    <div class="about-layout">
+
+      <!-- Left: dark manifesto card -->
+      <div class="about-manifesto reveal">
+        <div>
+          <div class="manifesto-eyebrow">Our philosophy</div>
+          <p class="manifesto-text">
+            We didn't start to chase clients.<br>
+            We started because we were <strong>tired of theory</strong> — and wanted to build things that actually ship.<br><br>
+            Every tool we use, every line we write, every system we design comes from <strong>genuine curiosity</strong> and a refusal to cut corners.
+          </p>
+        </div>
+        <div class="manifesto-footer">
+          <div class="manifesto-stat">
+            <span class="manifesto-stat-val">100%</span>
+            <span class="manifesto-stat-label">Custom builds — no templates, no drag-and-drop guesswork</span>
+          </div>
+          <div class="manifesto-stat">
+            <span class="manifesto-stat-val">4+</span>
+            <span class="manifesto-stat-label">Industry certifications across AI, cloud & marketing</span>
+          </div>
+          <div class="manifesto-stat">
+            <span class="manifesto-stat-val">Day 1</span>
+            <span class="manifesto-stat-label">You get direct access to the people actually building your project</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top right: tech stack -->
+      <div class="about-stack reveal reveal-delay-1">
+        <div class="about-card-label">Our stack</div>
+        <div class="stack-scroll">
+          <div class="stack-row">
+            <div class="stack-icon" style="background:#ff6b6b18;color:#ff6b6b;">W</div>
+            <span class="stack-name">Webflow</span>
+            <span class="stack-use">Web design</span>
+          </div>
+          <div class="stack-row">
+            <div class="stack-icon" style="background:#818cf818;color:#818cf8;">Fr</div>
+            <span class="stack-name">Framer</span>
+            <span class="stack-use">Interactive sites</span>
+          </div>
+          <div class="stack-row">
+            <div class="stack-icon" style="background:#22c55e18;color:#22c55e;">AI</div>
+            <span class="stack-name">OpenAI / Claude</span>
+            <span class="stack-use">AI integrations</span>
+          </div>
+          <div class="stack-row">
+            <div class="stack-icon" style="background:#fbbf2418;color:#fbbf24;">LC</div>
+            <span class="stack-name">LangChain</span>
+            <span class="stack-use">Agent pipelines</span>
+          </div>
+          <div class="stack-row">
+            <div class="stack-icon" style="background:#60a5fa18;color:#60a5fa;">n8</div>
+            <span class="stack-name">n8n / Make</span>
+            <span class="stack-use">Automation</span>
+          </div>
+          <div class="stack-row">
+            <div class="stack-icon" style="background:#c084fc18;color:#c084fc;">NX</div>
+            <span class="stack-name">Next.js</span>
+            <span class="stack-use">Full-stack apps</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="section-header reveal">
+      <span class="pill"><span></span> FAQ</span>
+      <h2 class="section-title" style="margin-top:16px;">Frequently asked questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What exactly do you mean by "AI Integration"?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">We connect AI models (like GPT-4, Claude, or custom models) directly into your website, CRM, or internal tools. This includes chatbots, content automation, lead scoring, customer support agents, and more — all built to fit seamlessly into your existing stack.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How long does a typical project take?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">A standard website project takes 3–4 weeks. An AI integration project varies from 2 to 8 weeks depending on complexity. We'll give you a precise timeline after our strategy call.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need any technical knowledge to work with you?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Not at all. We handle all the technical complexity. You just need to know your business goals — we'll translate those into the right solution and explain everything in plain language.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What platforms do you build on?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">We primarily build on Webflow and Framer for marketing sites, React/Next.js for web apps, and use tools like Make, n8n, and custom API layers for AI automation. We'll recommend the best stack for your use case.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Are you students or professionals?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Both! We're university students studying AI and Computer Science, but we work with industry-standard tools and follow professional development practices. Think of us as highly motivated, technically sharp builders who are deeply invested in every project.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / FOOTER -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="team-avatars">
+      <div class="team-av">A</div>
+      <div class="team-av" style="background:linear-gradient(135deg,#6366f1,#4f46e5);">M</div>
+      <div class="team-av" style="background:linear-gradient(135deg,#22c55e,#16a34a);">J</div>
+      <div class="team-av" style="background:linear-gradient(135deg,#f59e0b,#d97706);">S</div>
+      <div class="team-av" style="background:linear-gradient(135deg,#ec4899,#be185d);">L</div>
+    </div>
+    <div class="social-row">
+      <a href="#" class="social-btn" title="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#71717a"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="#" class="social-btn" title="Facebook">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#71717a"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="#" class="social-btn" title="Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#71717a" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+    </div>
+
+    <a href="mailto:hello@montnexus.com" class="contact-email">hello@montnexus.com</a>
+
+    <p class="footer-desc">Montnexus — a full-service AI agency crafting intelligent automation, high-converting websites, and data-driven marketing campaigns that move the needle.</p>
+
+    <div class="footer-bottom">
+      <span>© 2025 Montnexus. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ── Service panel switcher (removed — now using bento grid)
+
+  // ── FAQ accordion
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // ── Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Force show anything already visible on load
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 100) {
+        el.classList.add('visible');
+      }
+    });
+  });
+</script>
+</body>
+</html>

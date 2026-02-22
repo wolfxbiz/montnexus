@@ -1,0 +1,191 @@
+#about {
+  background: #f4f4f5;
+  padding: 100px 24px;
+  overflow: hidden;
+}
+
+.about-inner {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.about-split-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+
+.about-headline {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 800;
+  color: #202020;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.about-headline em {
+  font-style: normal;
+  color: var(--green-dim);
+}
+
+.about-header-right {
+  padding-bottom: 6px;
+}
+
+.about-header-right p {
+  font-size: 15px;
+  color: #71717a;
+  line-height: 1.7;
+  max-width: 340px;
+}
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 16px;
+}
+
+/* Manifesto card */
+.about-manifesto {
+  grid-row: span 2;
+  background: #202020;
+  border-radius: 24px;
+  padding: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 480px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-manifesto::before {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(146, 209, 8, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.manifesto-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.manifesto-text {
+  font-size: clamp(15px, 1.6vw, 18px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.75;
+  flex: 1;
+  margin-bottom: 36px;
+}
+
+.manifesto-text strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.manifesto-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.manifesto-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+}
+
+.manifesto-stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+  min-width: 72px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.manifesto-stat-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+
+/* Current stage card */
+.about-stage {
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 28px;
+}
+
+.about-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #a1a1aa;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.about-stage-desc {
+  font-size: 14px;
+  color: #71717a;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.stage-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stage-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.stage-item-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.stage-item-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #27272a;
+  margin-bottom: 2px;
+}
+
+.stage-item-sub {
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+@media (max-width: 800px) {
+  .about-split-header { grid-template-columns: 1fr; gap: 16px; }
+  .about-layout { grid-template-columns: 1fr; }
+  .about-manifesto { grid-row: span 1; min-height: auto; }
+}

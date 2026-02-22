@@ -1,0 +1,31 @@
+/* ================================
+   KEYFRAMES
+================================ */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(146, 209, 8, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(146, 209, 8, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(146, 209, 8, 0); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ================================
+   SCROLL REVEAL
+================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }

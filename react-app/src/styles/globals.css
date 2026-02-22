@@ -1,0 +1,219 @@
+/* ================================
+   CSS VARIABLES
+================================ */
+:root {
+  /* Colors */
+  --green: #92D108;
+  --green-dim: #7ab307;
+  --green-glow: rgba(146, 209, 8, 0.18);
+  --black: #202020;
+  --dark: #202020;
+  --dark2: #2a2a2a;
+  --white: #ffffff;
+  --gray: #71717a;
+  --gray-light: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-light: rgba(0, 0, 0, 0.08);
+
+  /* Typography */
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Noto Sans', sans-serif;
+}
+
+/* ================================
+   RESET
+================================ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #f4f4f5;
+  color: #2a2a2a;
+  overflow-x: hidden;
+}
+
+/* Display font for all headings */
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+/* Body font for small headings / labels */
+h4, h5, h6 {
+  font-family: var(--font-body);
+}
+
+/* ================================
+   UTILITY: PILLS
+================================ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 99px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: #52525b;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.pill span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.pill-dark {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+}
+.pill-dark span {
+  background: var(--green);
+}
+
+/* ================================
+   UTILITY: SECTION HEADER
+================================ */
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 800;
+  color: #202020;
+  letter-spacing: -0.01em;
+  line-height: 1.0;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title--light {
+  color: #ffffff;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-family: var(--font-body);
+  color: #71717a;
+  line-height: 1.7;
+}
+
+/* ================================
+   BUTTONS
+================================ */
+.btn-primary {
+  background: #202020;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-block;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover {
+  background: #333;
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #202020;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: border-color 0.2s, background 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-outline:hover {
+  border-color: #202020;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.btn-dark {
+  background: #202020;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-dark:hover {
+  background: #333;
+  transform: translateY(-1px);
+}
+
+.btn-light {
+  background: #fff;
+  color: #202020;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-light:hover {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+/* ================================
+   RESPONSIVE UTILITIES
+================================ */
+@media (max-width: 900px) {
+  header nav {
+    gap: 16px;
+  }
+  .nav-links {
+    display: none;
+  }
+}

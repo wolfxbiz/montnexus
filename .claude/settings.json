@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(npm create vite@latest:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(xargs sed:*)",
+      "Bash(/c/Users/vimal/montnexus/react-app/src/data/siteConfig.js:*)",
+      "Bash(/c/Users/vimal/montnexus/react-app/src/components/sections/About.css:*)",
+      "Bash(/c/Users/vimal/montnexus/react-app/src/components/sections/WhyUs.css:*)",
+      "Bash(/c/Users/vimal/montnexus/react-app/src/components/sections/Contact.jsx:*)",
+      "Bash(find:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\vimal\\montnexus"
+    ]
+  }
+}
