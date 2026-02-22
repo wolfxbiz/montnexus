@@ -1,0 +1,454 @@
+/* ================================
+   WEB DEVELOPMENT PAGE
+================================ */
+
+/* ── Page load animations ── */
+@keyframes wd-page-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes wd-hero-item {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Whole-page fade-in on mount */
+.wd-page {
+  animation: wd-page-enter 0.45s ease both;
+}
+
+/* Hero staggered entrance — scoped to .wd-page to avoid affecting the retail page */
+.wd-page #hero .hero-brand {
+  animation: wd-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+.wd-page #hero .hero-title {
+  animation: wd-hero-item 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+.wd-page #hero .hero-sub {
+  animation: wd-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
+}
+.wd-page #hero .hero-cta {
+  animation: wd-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.48s both;
+}
+.wd-page #hero .hero-stats {
+  animation: wd-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.60s both;
+}
+.wd-page #hero .hero-right {
+  animation: wd-hero-item 1.0s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .wd-page {
+    animation: none;
+  }
+  .wd-page #hero .hero-brand,
+  .wd-page #hero .hero-title,
+  .wd-page #hero .hero-sub,
+  .wd-page #hero .hero-cta,
+  .wd-page #hero .hero-stats,
+  .wd-page #hero .hero-right {
+    animation: none;
+  }
+}
+
+/* ── Shared container ── */
+.wd-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ── Shared dot ── */
+.wd-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+
+/* ── Overview ── */
+.wd-overview {
+  background: #f4f4f5;
+  padding: 100px 24px;
+}
+
+.wd-overview-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  max-width: 720px;
+}
+
+.wd-overview-body {
+  font-size: 16px;
+  color: #71717a;
+  line-height: 1.8;
+  max-width: 680px;
+}
+
+/* ── Services ── */
+.wd-services {
+  background: #ffffff;
+  padding: 100px 24px;
+}
+
+.wd-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.wd-service-card {
+  background: #f4f4f5;
+  border-radius: 20px;
+  padding: 36px 28px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
+}
+
+.wd-service-card:hover {
+  border-color: rgba(146, 209, 8, 0.35);
+}
+
+.wd-service-number {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.wd-service-title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.wd-service-desc {
+  font-size: 14px;
+  color: #71717a;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.wd-feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wd-feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #52525b;
+  line-height: 1.5;
+}
+
+/* ── Process ── */
+.wd-process {
+  background: #202020;
+  padding: 100px 24px;
+}
+
+.wd-process-sub {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.wd-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.wd-process-step {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 28px;
+  transition: border-color 0.2s;
+}
+
+.wd-process-step:hover {
+  border-color: rgba(146, 209, 8, 0.25);
+}
+
+.wd-process-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.wd-process-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+}
+
+.wd-process-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.65;
+}
+
+/* ── Why Montnexus ── */
+.wd-why {
+  background: #f4f4f5;
+  padding: 100px 24px;
+}
+
+.wd-why-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.wd-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.wd-why-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #27272a;
+}
+
+/* ── Maintenance ── */
+.wd-maintenance {
+  background: #ffffff;
+  padding: 100px 24px;
+}
+
+.wd-maintenance-card {
+  background: #f4f4f5;
+  border-radius: 24px;
+  padding: 52px;
+  max-width: 680px;
+}
+
+.wd-maintenance-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+
+.wd-maintenance-desc {
+  font-size: 15px;
+  color: #71717a;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.wd-maintenance-note {
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-dim);
+}
+
+/* ── CTA ── */
+.wd-cta {
+  background: #202020;
+  padding: 100px 24px;
+}
+
+.wd-cta-inner {
+  max-width: 600px;
+}
+
+.wd-cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.wd-cta-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+.wd-cta-btn {
+  font-size: 15px;
+  padding: 13px 28px;
+}
+
+.wd-cta-location {
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ================================
+   CONTACT / FOOTER — DARK THEME
+   Overrides shared Contact.css so the footer matches
+   the dark aesthetic of this page.
+================================ */
+.wd-page #contact {
+  background: #171717;
+}
+
+.wd-page #contact .pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.wd-page .contact-heading {
+  color: #ffffff;
+}
+
+.wd-page .contact-sub {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.wd-page .contact-email {
+  color: #ffffff;
+  border-bottom-color: rgba(255, 255, 255, 0.10);
+}
+
+.wd-page .contact-email:hover {
+  color: var(--green);
+}
+
+.wd-page .contact-loc-label {
+  color: rgba(255, 255, 255, 0.80);
+}
+
+.wd-page .contact-loc-sub {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.wd-page .contact-loc-divider {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.wd-page .social-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.wd-page .social-btn svg {
+  filter: brightness(4);
+}
+
+.wd-page .social-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+
+.wd-page .social-btn:hover svg {
+  filter: brightness(10);
+}
+
+.wd-page .footer-bottom {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.wd-page .footer-logo {
+  mix-blend-mode: screen;
+}
+
+.wd-page .footer-logo-wrap {
+  opacity: 0.60;
+}
+
+.wd-page .footer-copy {
+  color: rgba(255, 255, 255, 0.30);
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+  .wd-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wd-process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wd-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .wd-hero {
+    padding: 140px 20px 80px;
+  }
+
+  .wd-overview,
+  .wd-services,
+  .wd-process,
+  .wd-why,
+  .wd-maintenance,
+  .wd-cta {
+    padding: 72px 20px;
+  }
+
+  .wd-process-grid,
+  .wd-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wd-maintenance-card {
+    padding: 32px 24px;
+  }
+}

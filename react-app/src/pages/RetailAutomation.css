@@ -1,0 +1,405 @@
+/* ================================
+   RETAIL AUTOMATION PAGE
+================================ */
+
+/* ── Page load animations ── */
+@keyframes ra-page-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ra-hero-item {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Whole-page fade-in on mount */
+.ra-page {
+  animation: ra-page-enter 0.45s ease both;
+}
+
+/* Hero staggered entrance — same pattern as Web Dev page */
+.ra-hero .ra-container > .reveal:nth-child(1) {
+  animation: ra-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+  transition: none;
+}
+.ra-hero .ra-container > .reveal:nth-child(2) {
+  animation: ra-hero-item 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+  transition: none;
+}
+.ra-hero .ra-container > .reveal:nth-child(3) {
+  animation: ra-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both;
+  transition: none;
+}
+.ra-hero .ra-container > .reveal:nth-child(4) {
+  animation: ra-hero-item 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.54s both;
+  transition: none;
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ra-page {
+    animation: none;
+  }
+  .ra-hero .ra-container > .reveal {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ── Shared container ── */
+.ra-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ── Shared dot ── */
+.ra-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ── Hero ── */
+.ra-hero {
+  background: #202020;
+  padding: 160px 24px 100px;
+}
+
+.ra-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 9vw, 104px);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  margin-top: 24px;
+  margin-bottom: 28px;
+}
+
+.ra-hero-sub {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.65;
+  margin-bottom: 40px;
+}
+
+.ra-hero-cta {
+  font-size: 15px;
+  padding: 13px 28px;
+}
+
+/* ── Overview ── */
+.ra-overview {
+  background: #f4f4f5;
+  padding: 100px 24px;
+}
+
+.ra-overview-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  max-width: 720px;
+}
+
+.ra-overview-heading em {
+  font-style: normal;
+  color: var(--green-dim);
+}
+
+.ra-overview-body {
+  font-size: 16px;
+  color: #71717a;
+  line-height: 1.8;
+  max-width: 680px;
+}
+
+/* ── Services ── */
+.ra-services {
+  background: #ffffff;
+  padding: 100px 24px;
+}
+
+.ra-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.ra-service-card {
+  background: #f4f4f5;
+  border-radius: 20px;
+  padding: 36px 28px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
+}
+
+.ra-service-card:hover {
+  border-color: rgba(146, 209, 8, 0.35);
+}
+
+.ra-service-number {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.ra-service-title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.ra-service-desc {
+  font-size: 14px;
+  color: #71717a;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.ra-feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ra-feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #52525b;
+  line-height: 1.5;
+}
+
+/* ── Process ── */
+.ra-process {
+  background: #202020;
+  padding: 100px 24px;
+}
+
+.ra-process-sub {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ra-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.ra-process-step {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 28px;
+  transition: border-color 0.2s;
+}
+
+.ra-process-step:hover {
+  border-color: rgba(146, 209, 8, 0.25);
+}
+
+.ra-process-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.ra-process-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+}
+
+.ra-process-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.65;
+}
+
+/* ── Why ── */
+.ra-why {
+  background: #f4f4f5;
+  padding: 100px 24px;
+}
+
+.ra-why-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.ra-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ra-why-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #27272a;
+}
+
+/* ── Maintenance ── */
+.ra-maintenance {
+  background: #ffffff;
+  padding: 100px 24px;
+}
+
+.ra-maintenance-card {
+  background: #f4f4f5;
+  border-radius: 24px;
+  padding: 52px;
+  max-width: 680px;
+}
+
+.ra-maintenance-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  color: #202020;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+
+.ra-maintenance-desc {
+  font-size: 15px;
+  color: #71717a;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.ra-maintenance-note {
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-dim);
+}
+
+/* ── CTA ── */
+.ra-cta {
+  background: #202020;
+  padding: 100px 24px;
+}
+
+.ra-cta-inner {
+  max-width: 600px;
+}
+
+.ra-cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.ra-cta-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+.ra-cta-btn {
+  font-size: 15px;
+  padding: 13px 28px;
+}
+
+.ra-cta-location {
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+  .ra-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ra-process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ra-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ra-hero {
+    padding: 140px 20px 80px;
+  }
+
+  .ra-overview,
+  .ra-services,
+  .ra-process,
+  .ra-why,
+  .ra-maintenance,
+  .ra-cta {
+    padding: 72px 20px;
+  }
+
+  .ra-process-grid,
+  .ra-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ra-maintenance-card {
+    padding: 32px 24px;
+  }
+}

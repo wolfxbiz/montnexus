@@ -1,0 +1,144 @@
+/* ================================
+   RETAIL AUTOMATION ROUTE
+   Page-load animations for existing Hero.jsx elements.
+   All selectors are scoped under .retail-page so they
+   never affect any other route.
+================================ */
+
+@keyframes rp-page-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes rp-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Whole-page fade-in */
+.retail-page {
+  animation: rp-page-enter 0.45s ease both;
+}
+
+/* Hero staggered entrance — scoped to avoid touching Hero.css */
+.retail-page #hero .hero-brand {
+  animation: rp-item-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+.retail-page #hero .hero-title {
+  animation: rp-item-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+
+.retail-page #hero .hero-sub {
+  animation: rp-item-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
+}
+
+.retail-page #hero .hero-cta {
+  animation: rp-item-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.48s both;
+}
+
+.retail-page #hero .hero-stats {
+  animation: rp-item-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.60s both;
+}
+
+.retail-page #hero .hero-right {
+  animation: rp-item-enter 1.0s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .retail-page {
+    animation: none;
+  }
+  .retail-page #hero .hero-brand,
+  .retail-page #hero .hero-title,
+  .retail-page #hero .hero-sub,
+  .retail-page #hero .hero-cta,
+  .retail-page #hero .hero-stats,
+  .retail-page #hero .hero-right {
+    animation: none;
+  }
+}
+
+/* ================================
+   CONTACT / FOOTER — DARK THEME
+   Override the shared Contact.css light palette so the
+   footer is consistent with the rest of this dark page.
+================================ */
+.retail-page #contact {
+  background: #171717;
+}
+
+.retail-page #contact .pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.retail-page .contact-heading {
+  color: #ffffff;
+}
+
+.retail-page .contact-sub {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.retail-page .contact-email {
+  color: #ffffff;
+  border-bottom-color: rgba(255, 255, 255, 0.10);
+}
+
+.retail-page .contact-email:hover {
+  color: var(--green);
+}
+
+.retail-page .contact-loc-label {
+  color: rgba(255, 255, 255, 0.80);
+}
+
+.retail-page .contact-loc-sub {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.retail-page .contact-loc-divider {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.retail-page .social-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.retail-page .social-btn svg {
+  filter: brightness(4);
+}
+
+.retail-page .social-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+
+.retail-page .social-btn:hover svg {
+  filter: brightness(10);
+}
+
+.retail-page .footer-bottom {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.retail-page .footer-logo {
+  mix-blend-mode: screen;
+}
+
+.retail-page .footer-logo-wrap {
+  opacity: 0.60;
+}
+
+.retail-page .footer-copy {
+  color: rgba(255, 255, 255, 0.30);
+}

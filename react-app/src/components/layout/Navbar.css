@@ -20,12 +20,31 @@ header nav {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  position: relative;
 }
 
 .nav-logo-img {
   height: 20px;
   width: auto;
   display: block;
+  transition: opacity 0.35s ease;
+}
+
+/* Green version — sits on top, hidden by default */
+.nav-logo-img-green {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.nav-logo:hover .nav-logo-img {
+  opacity: 0;
+}
+
+.nav-logo:hover .nav-logo-img-green {
+  opacity: 1;
 }
 
 .nav-links {
