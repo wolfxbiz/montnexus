@@ -12,7 +12,10 @@
       "Bash(/c/Users/vimal/montnexus/react-app/src/components/sections/About.css:*)",
       "Bash(/c/Users/vimal/montnexus/react-app/src/components/sections/WhyUs.css:*)",
       "Bash(/c/Users/vimal/montnexus/react-app/src/components/sections/Contact.jsx:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\vimal\\montnexus"
