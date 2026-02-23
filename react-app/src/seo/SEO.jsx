@@ -15,19 +15,21 @@ export default function SEO({
   const canonicalUrl = `${siteConfig.url}${canonicalPath}`;
   const ogImg = ogImage || `${siteConfig.url}${siteConfig.openGraph.image}`;
 
+  const socialLinks = [
+    siteConfig.social.linkedin,
+    siteConfig.social.facebook,
+    siteConfig.social.instagram,
+  ].filter((link) => link && link !== '#');
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/favicon.ico`,
+    logo: `${siteConfig.url}/logo.png`,
     email: siteConfig.email,
     description: metaDescription,
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.facebook,
-      siteConfig.social.instagram,
-    ],
+    ...(socialLinks.length > 0 && { sameAs: socialLinks }),
     areaServed: ['IN', 'AE'],
   };
 
