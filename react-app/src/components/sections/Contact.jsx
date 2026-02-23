@@ -4,7 +4,7 @@ import logoWordmark from '../../assets/Frame 17.png';
 import './Contact.css';
 
 // ── Get your free access key at https://web3forms.com ──────────────────────
-const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+const WEB3FORMS_KEY = '2d4894bc-20c8-41e8-ba98-11ffc6e7f250';
 // ───────────────────────────────────────────────────────────────────────────
 
 export default function Contact() {
