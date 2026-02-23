@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/layout/Navbar';
 import ScrollToTop from './components/ui/ScrollToTop';
 import HomeLanding from './pages/HomeLanding';
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/retail-automation-system" element={<RetailPage />} />
         <Route path="/web-design-development" element={<WebDevelopment />} />
       </Routes>
+      <Analytics />
     </>
   );
 }
