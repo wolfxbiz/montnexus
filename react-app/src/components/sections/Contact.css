@@ -48,6 +48,137 @@
   color: var(--green-dim);
 }
 
+/* ── Contact form ── */
+.contact-form {
+  width: 100%;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.cf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.cf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.cf-row .cf-field {
+  margin-bottom: 0;
+}
+
+.cf-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #52525b;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cf-input {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #202020;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.cf-input::placeholder {
+  color: #a1a1aa;
+}
+
+.cf-input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
+}
+
+.cf-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.cf-error {
+  font-size: 13px;
+  color: #ef4444;
+  margin-bottom: 12px;
+}
+
+.cf-submit {
+  width: 100%;
+  background: #202020;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.cf-submit:hover {
+  background: var(--green);
+  color: #111;
+}
+
+.cf-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Success state */
+.cf-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 24px;
+  margin-bottom: 40px;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+.cf-success-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cf-success-msg {
+  font-size: 15px;
+  color: #52525b;
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .cf-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Location row */
 .contact-locations {
   display: flex;

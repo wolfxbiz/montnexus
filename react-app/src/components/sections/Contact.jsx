@@ -1,8 +1,48 @@
+import { useState } from 'react';
 import { siteConfig } from '../../data/siteConfig';
 import logoWordmark from '../../assets/Frame 17.png';
 import './Contact.css';
 
+// ── Get your free access key at https://web3forms.com ──────────────────────
+const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+// ───────────────────────────────────────────────────────────────────────────
+
 export default function Contact() {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+
+  function handleChange(e) {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `New enquiry from ${formData.name} — Montnexus`,
+          from_name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          redirect: false,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  }
+
   return (
     <section id="contact">
       <div className="contact-inner">
@@ -17,6 +57,68 @@ export default function Contact() {
             or looking to improve operational clarity, reach out directly.
           </p>
         </div>
+
+        {status === 'success' ? (
+          <div className="cf-success">
+            <div className="cf-success-icon">✓</div>
+            <p className="cf-success-msg">Message sent. We&rsquo;ll get back to you shortly.</p>
+          </div>
+        ) : (
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
+            <div className="cf-row">
+              <div className="cf-field">
+                <label className="cf-label" htmlFor="cf-name">Name</label>
+                <input
+                  id="cf-name"
+                  className="cf-input"
+                  type="text"
+                  name="name"
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="cf-field">
+                <label className="cf-label" htmlFor="cf-email">Email</label>
+                <input
+                  id="cf-email"
+                  className="cf-input"
+                  type="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="cf-field">
+              <label className="cf-label" htmlFor="cf-message">Message</label>
+              <textarea
+                id="cf-message"
+                className="cf-input cf-textarea"
+                name="message"
+                placeholder="Tell us about your project or requirement…"
+                value={formData.message}
+                onChange={handleChange}
+                rows={5}
+                required
+              />
+            </div>
+
+            {status === 'error' && (
+              <p className="cf-error">
+                Something went wrong. Please try again or email us directly.
+              </p>
+            )}
+
+            <button className="cf-submit" type="submit" disabled={status === 'loading'}>
+              {status === 'loading' ? 'Sending…' : 'Send Message →'}
+            </button>
+          </form>
+        )}
 
         <a href={`mailto:${siteConfig.email}`} className="contact-email">
           {siteConfig.email}
