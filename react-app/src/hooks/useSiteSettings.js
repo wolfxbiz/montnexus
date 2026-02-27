@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext, useContext } from 'react';
+import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { supabase } from '../lib/supabase';
 
 const GOOGLE_FONTS = [
@@ -59,11 +59,7 @@ const SiteSettingsContext = createContext({ settings: DEFAULTS, updateSetting: (
 
 export function SiteSettingsProvider({ children }) {
   const value = useSiteSettingsInternal();
-  return (
-    <SiteSettingsContext.Provider value={value}>
-      {children}
-    </SiteSettingsContext.Provider>
-  );
+  return React.createElement(SiteSettingsContext.Provider, { value }, children);
 }
 
 export function useSiteSettings() {
