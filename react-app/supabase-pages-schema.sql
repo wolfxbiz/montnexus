@@ -52,7 +52,19 @@ create policy "Public read site_settings" on public.site_settings for select usi
 create policy "Auth write site_settings"  on public.site_settings for all    using (auth.role() = 'authenticated');
 
 -- ============================================================
--- AUTO-UPDATE updated_at (reuses function from supabase-schema.sql)
+-- AUTO-UPDATE updated_at FUNCTION (safe to run even if already exists)
+-- ============================================================
+
+create or replace function update_updated_at_column()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+-- ============================================================
+-- AUTO-UPDATE TRIGGERS
 -- ============================================================
 
 create trigger site_pages_updated
