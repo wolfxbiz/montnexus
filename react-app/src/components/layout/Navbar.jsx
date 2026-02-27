@@ -41,6 +41,7 @@ export default function Navbar() {
           <li><a href={href('services')}>Services</a></li>
           <li><a href={href('how')}>How We Work</a></li>
           <li><Link to={serviceLink.to}>{serviceLink.label}</Link></li>
+          <li><Link to="/blog">Blog</Link></li>
         </ul>
 
         <div className="nav-right">
@@ -65,6 +66,7 @@ export default function Navbar() {
           <li><a href={href('services')} onClick={close}>Services</a></li>
           <li><a href={href('how')} onClick={close}>How We Work</a></li>
           <li><Link to={serviceLink.to} onClick={close}>{serviceLink.label}</Link></li>
+          <li><Link to="/blog" onClick={close}>Blog</Link></li>
           <li><a href={href('contact')} className="drawer-cta" onClick={close}>Get in Touch</a></li>
         </ul>
       </div>
