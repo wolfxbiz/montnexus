@@ -11,6 +11,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import PostEditor from './pages/admin/PostEditor';
+import AdminSocials from './pages/admin/AdminSocials';
 
 function PublicLayout({ children }) {
   return (
@@ -44,6 +45,7 @@ function AppRoutes() {
           <Route path="posts" element={<AdminDashboard />} />
           <Route path="posts/new" element={<PostEditor />} />
           <Route path="posts/:id/edit" element={<PostEditor />} />
+          <Route path="socials" element={<AdminSocials />} />
         </Route>
       </Routes>
       <Analytics />

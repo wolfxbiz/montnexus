@@ -1,0 +1,223 @@
+.socials-notification {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.socials-notification--ok {
+  background: rgba(146, 209, 8, 0.12);
+  border: 1px solid rgba(146, 209, 8, 0.25);
+  color: var(--green);
+}
+
+.socials-notification--err {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #f87171;
+}
+
+.socials-intro {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.socials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 860px) {
+  .socials-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Card ── */
+.socials-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+
+.socials-card--connected {
+  border-color: rgba(146, 209, 8, 0.2);
+}
+
+.socials-card__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.socials-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.socials-card__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e4e4e7;
+  font-family: var(--font-body);
+}
+
+.socials-card__status {
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.socials-card__status.connected { color: var(--green); }
+.socials-card__status.disconnected { color: rgba(255, 255, 255, 0.3); }
+
+.socials-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+}
+
+.socials-expiry {
+  font-size: 11px;
+  color: #eab308;
+  background: rgba(234, 179, 8, 0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(234, 179, 8, 0.15);
+}
+
+.socials-test-result {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.socials-test-result.ok {
+  background: rgba(146, 209, 8, 0.1);
+  color: var(--green);
+  border: 1px solid rgba(146, 209, 8, 0.2);
+}
+
+.socials-test-result.err {
+  background: rgba(220, 38, 38, 0.08);
+  color: #f87171;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  font-weight: 400;
+}
+
+.socials-card__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.socials-connect-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green);
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.socials-connect-btn:hover {
+  background: var(--green-dim);
+}
+
+.socials-setup-btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.socials-setup-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.socials-setup-steps {
+  background: #111;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.socials-setup-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+}
+
+.socials-step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(146, 209, 8, 0.15);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.socials-note {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.7;
+}
+
+.socials-note strong {
+  color: rgba(255, 255, 255, 0.7);
+}

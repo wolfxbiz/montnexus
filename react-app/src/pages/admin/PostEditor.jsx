@@ -33,6 +33,7 @@ export default function PostEditor() {
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
   const [error, setError] = useState('');
+  const [socialStatus, setSocialStatus] = useState(null);
 
   // Populate form when editing
   useEffect(() => {
@@ -89,20 +90,39 @@ export default function PostEditor() {
     };
 
     try {
+      let savedPost;
       if (isEdit) {
-        await updatePost(id, payload);
+        savedPost = await updatePost(id, payload);
         setSaveStatus('Saved ✓');
       } else {
-        const newPost = await createPost(payload);
+        savedPost = await createPost(payload);
         setSaveStatus('Created ✓');
-        navigate(`/admin/posts/${newPost.id}/edit`, { replace: true });
+        navigate(`/admin/posts/${savedPost.id}/edit`, { replace: true });
+      }
+
+      // Auto-post to social media if publishing
+      if (publishStatus === 'published') {
+        setSaveStatus('Publishing to social media…');
+        setSocialStatus(null);
+        try {
+          const socialRes = await fetch('/api/social-post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'all', post: savedPost || payload }),
+          });
+          const socialData = await socialRes.json();
+          setSocialStatus(socialData.results || {});
+        } catch {
+          setSocialStatus({ error: 'Social posting failed' });
+        }
+        setSaveStatus('Published ✓');
       }
     } catch (err) {
       setError(err.message || 'Save failed.');
       setSaveStatus('');
     } finally {
       setSaving(false);
-      setTimeout(() => setSaveStatus(''), 3000);
+      setTimeout(() => setSaveStatus(''), 4000);
     }
   };
 
@@ -269,6 +289,24 @@ export default function PostEditor() {
                 </div>
               </div>
             </div>
+
+            {/* Social post results */}
+            {socialStatus && (
+              <div style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '14px 16px', fontSize: '12px', marginBottom: '12px' }}>
+                <div style={{ fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em', fontSize: '11px' }}>Social Media</div>
+                {socialStatus.error ? (
+                  <span style={{ color: '#f87171' }}>{socialStatus.error}</span>
+                ) : (
+                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                    {Object.entries(socialStatus).map(([platform, result]) => (
+                      <span key={platform} style={{ padding: '4px 10px', borderRadius: '6px', fontWeight: 600, background: result?.ok ? 'rgba(146,209,8,0.1)' : 'rgba(220,38,38,0.1)', color: result?.ok ? '#92D108' : '#f87171', border: `1px solid ${result?.ok ? 'rgba(146,209,8,0.2)' : 'rgba(220,38,38,0.2)'}` }}>
+                        {result?.ok ? '✓' : '✗'} {platform}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Footer actions */}
             <div className="admin-editor-footer">

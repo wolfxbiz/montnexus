@@ -26,6 +26,11 @@ function LayoutIcon({ name }) {
         <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
       </svg>
     ),
+    socials: (
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+      </svg>
+    ),
   };
   return icons[name] || null;
 }
@@ -84,6 +89,11 @@ export default function AdminLayout() {
           <NavLink to="/admin/posts/new" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
             <LayoutIcon name="new" />
             New Post
+          </NavLink>
+
+          <NavLink to="/admin/socials" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
+            <LayoutIcon name="socials" />
+            Social Media
           </NavLink>
 
           <span className="admin-nav__section">Site</span>
