@@ -27,6 +27,12 @@ export default async function handler(req, res) {
       case 'social':
         result = await generateSocial(payload);
         break;
+      case 'page_content':
+        result = await generatePageContent(payload);
+        break;
+      case 'section_content':
+        result = await generateSectionContent(payload);
+        break;
       default:
         return res.status(400).json({ error: `Unknown action: ${action}` });
     }
@@ -103,6 +109,96 @@ Return a JSON object (no markdown, just raw JSON) with:
 
   const text = message.content[0].text.trim();
   // Strip markdown code fences if present
+  const json = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(json);
+}
+
+async function generatePageContent({ business_name, business_description, tone = 'professional' }) {
+  const SECTION_SCHEMAS = `
+Section type schemas (output EXACTLY these keys):
+- "hero": { tag, headline, subheadline, cta_primary:{text,link}, cta_secondary:{text,link}, stats:[{number,label}] }
+- "features_grid": { tag, title, body, items:[{number,tag,title,description,features:[],link}] }
+- "services_grid": { tag, title, body, services:[{number,title,description,features:[]}] }
+- "process_steps": { tag, title, body, steps:[{number,title,description}] }
+- "about_strip": { tag, title, body, stats:[{number,label}] }
+- "cta_banner": { headline, body, cta_text, cta_link, email }
+`;
+
+  const message = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 3500,
+    messages: [
+      {
+        role: 'user',
+        content: `Create a complete professional website for this business:
+
+Business Name: ${business_name}
+Description: ${business_description}
+Tone: ${tone}
+
+${SECTION_SCHEMAS}
+
+Generate a full website with these sections in order:
+1. hero (compelling headline, subheadline, 2 CTAs, 3 stats)
+2. features_grid (2-3 key service/feature cards with bullet points)
+3. services_grid (3 service offerings with features)
+4. process_steps (4-6 process steps)
+5. cta_banner (final call to action with email: hello@${business_name.toLowerCase().replace(/\s+/g, '')}.com)
+
+Also include: site_name, meta_title (under 60 chars), meta_description (under 160 chars).
+
+Return ONLY valid JSON (no markdown fences):
+{
+  "site_name": "...",
+  "meta_title": "...",
+  "meta_description": "...",
+  "sections": [
+    {"section_type": "hero", "content": {...}},
+    ...
+  ]
+}`,
+      },
+    ],
+  });
+
+  const text = message.content[0].text.trim();
+  const json = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(json);
+}
+
+async function generateSectionContent({ section_type, business_description, context = '', tone = 'professional' }) {
+  const SCHEMAS = {
+    hero: '{ tag, headline, subheadline, cta_primary:{text,link}, cta_secondary:{text,link}, stats:[{number,label}] }',
+    features_grid: '{ tag, title, body, items:[{number,tag,title,description,features:[],link}] }',
+    services_grid: '{ tag, title, body, services:[{number,title,description,features:[]}] }',
+    process_steps: '{ tag, title, body, steps:[{number,title,description}] }',
+    about_strip: '{ tag, title, body, stats:[{number,label}] }',
+    cta_banner: '{ headline, body, cta_text, cta_link, email }',
+    text_content: '{ tag, title, body }',
+  };
+
+  const schema = SCHEMAS[section_type] || '{}';
+
+  const message = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1000,
+    messages: [
+      {
+        role: 'user',
+        content: `Generate content for a "${section_type}" website section.
+
+Business: ${business_description}
+${context ? `Context: ${context}` : ''}
+Tone: ${tone}
+
+Required JSON schema: ${schema}
+
+Return ONLY valid JSON matching that schema exactly (no markdown fences).`,
+      },
+    ],
+  });
+
+  const text = message.content[0].text.trim();
   const json = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '').trim();
   return JSON.parse(json);
 }

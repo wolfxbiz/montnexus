@@ -18,6 +18,14 @@
   /* Typography */
   --font-display: 'Barlow Condensed', sans-serif;
   --font-body: 'Noto Sans', sans-serif;
+
+  /* CMS Design Tokens — overridden by useSiteSettings at runtime */
+  --primary: #92D108;
+  --bg-dark: #111111;
+  --bg-light: #f4f4f5;
+  --text-on-dark: #ffffff;
+  --text-on-light: #202020;
+  --btn-radius: 6px;
 }
 
 /* ================================

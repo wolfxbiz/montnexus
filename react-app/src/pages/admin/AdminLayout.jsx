@@ -31,6 +31,16 @@ function LayoutIcon({ name }) {
         <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
       </svg>
     ),
+    pages: (
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+      </svg>
+    ),
+    settings: (
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"/>
+      </svg>
+    ),
   };
   return icons[name] || null;
 }
@@ -94,6 +104,25 @@ export default function AdminLayout() {
           <NavLink to="/admin/socials" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
             <LayoutIcon name="socials" />
             Social Media
+          </NavLink>
+
+          <span className="admin-nav__section">Pages</span>
+
+          <NavLink to="/admin/pages" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
+            <LayoutIcon name="pages" />
+            All Pages
+          </NavLink>
+
+          <NavLink to="/admin/pages/new" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
+            <LayoutIcon name="new" />
+            New Page
+          </NavLink>
+
+          <span className="admin-nav__section">Design</span>
+
+          <NavLink to="/admin/settings" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
+            <LayoutIcon name="settings" />
+            Settings
           </NavLink>
 
           <span className="admin-nav__section">Site</span>

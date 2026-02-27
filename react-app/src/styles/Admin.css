@@ -722,3 +722,67 @@
     flex-direction: column;
   }
 }
+
+/* ================================
+   MODAL / DIALOG
+================================ */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.admin-modal {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.admin-modal__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: #e4e4e7;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.admin-modal__body {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.admin-modal__body strong {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.admin-modal__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ================================
+   ADMIN ACTION BUTTON DANGER
+================================ */
+.admin-action-btn--danger {
+  color: #f87171 !important;
+  border-color: rgba(248, 113, 113, 0.2) !important;
+}
+.admin-action-btn--danger:hover {
+  background: rgba(220, 38, 38, 0.1) !important;
+  border-color: rgba(248, 113, 113, 0.4) !important;
+}
