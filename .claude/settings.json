@@ -17,10 +17,12 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(wc -l src/**/*.jsx src/**/*.js)",
-      "Bash(npx vercel --version)"
+      "Bash(npx vercel --version)",
+      "Bash(dir \"/c/Users/vimal/montnexus/react-app/src/styles\")"
     ],
     "additionalDirectories": [
-      "C:\\Users\\vimal\\montnexus"
+      "C:\\Users\\vimal\\montnexus",
+      "C:\\Users\\vimal\\.claude\\plans"
     ]
   }
 }
