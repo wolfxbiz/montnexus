@@ -279,6 +279,37 @@ export default function PageEditor() {
   const [seoSaving, setSeoSaving] = useState(false);
   const [seoStatus, setSeoStatus] = useState('');
 
+  // Publish / unpublish
+  const [publishing, setPublishing] = useState(false);
+  const [publishStatus, setPublishStatus] = useState('');
+
+  const handlePublish = async () => {
+    setPublishing(true);
+    setPublishStatus('');
+    try {
+      await updatePage(id, { status: 'published' });
+      setSeoForm(prev => ({ ...prev, status: 'published' }));
+      setPublishStatus('published');
+      setTimeout(() => setPublishStatus(''), 3000);
+    } catch (err) {
+      alert('Failed to publish: ' + err.message);
+    } finally {
+      setPublishing(false);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    setPublishing(true);
+    try {
+      await updatePage(id, { status: 'draft' });
+      setSeoForm(prev => ({ ...prev, status: 'draft' }));
+    } catch (err) {
+      alert('Failed to unpublish: ' + err.message);
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   useEffect(() => {
     if (id) fetchPageById(id);
   }, [id, fetchPageById]);
@@ -424,15 +455,58 @@ export default function PageEditor() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link to="/admin/pages" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontSize: 13 }}>← Pages</Link>
           <span className="admin-topbar__title">Edit: {page.title}</span>
-          {page.status === 'published' && (
-            <a
-              href={`/${page.slug === 'home' ? '' : page.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: 12, color: '#92D108', textDecoration: 'none' }}
-            >
-              View ↗
-            </a>
+          {/* Status badge */}
+          <span style={{
+            fontSize: 11, fontWeight: 700, borderRadius: 99, padding: '3px 10px',
+            background: page.status === 'published' ? 'rgba(146,209,8,0.12)' : 'rgba(255,255,255,0.07)',
+            color: page.status === 'published' ? '#92D108' : 'rgba(255,255,255,0.35)',
+            border: `1px solid ${page.status === 'published' ? 'rgba(146,209,8,0.25)' : 'rgba(255,255,255,0.1)'}`,
+          }}>
+            {page.status === 'published' ? 'Published' : 'Draft'}
+          </span>
+          {publishStatus === 'published' && (
+            <span style={{ fontSize: 12, color: '#92D108' }}>Page published ✓</span>
+          )}
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {page.status === 'published' ? (
+            <>
+              <a
+                href={`/${page.slug === 'home' ? '' : page.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="admin-btn-secondary"
+                style={{ padding: '7px 14px', textDecoration: 'none', fontSize: 13 }}
+              >
+                View Live ↗
+              </a>
+              <button
+                onClick={handleUnpublish}
+                className="admin-btn-secondary"
+                style={{ padding: '7px 14px' }}
+                disabled={publishing}
+              >
+                Unpublish
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setActiveTab('preview')}
+                className="admin-btn-secondary"
+                style={{ padding: '7px 14px' }}
+              >
+                Preview
+              </button>
+              <button
+                onClick={handlePublish}
+                className="admin-btn-primary"
+                style={{ width: 'auto', padding: '7px 18px' }}
+                disabled={publishing}
+              >
+                {publishing ? 'Publishing…' : 'Publish'}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -536,11 +610,26 @@ export default function PageEditor() {
         {/* Preview Tab */}
         {activeTab === 'preview' && (
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', margin: 0 }}>
-                Live preview of your page content. Unsaved edits to the open section are shown here.
-              </p>
-              {page.status === 'published' && (
+            {/* Publish / view bar */}
+            {page.status === 'draft' ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(146,209,8,0.07)', border: '1px solid rgba(146,209,8,0.2)', borderRadius: 10, padding: '12px 18px', marginBottom: 16 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+                  Looking good? Publish the page to make it live.
+                </p>
+                <button
+                  onClick={handlePublish}
+                  className="admin-btn-primary"
+                  style={{ width: 'auto', padding: '8px 20px', flexShrink: 0 }}
+                  disabled={publishing}
+                >
+                  {publishing ? 'Publishing…' : 'Publish Page'}
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', margin: 0 }}>
+                  This page is live. Changes you save are immediately reflected.
+                </p>
                 <a
                   href={`/${page.slug === 'home' ? '' : page.slug}`}
                   target="_blank"
@@ -550,8 +639,9 @@ export default function PageEditor() {
                 >
                   Open Live Page ↗
                 </a>
-              )}
-            </div>
+              </div>
+            )}
+
             {/* Preview frame */}
             <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
               {sections.length === 0 ? (
