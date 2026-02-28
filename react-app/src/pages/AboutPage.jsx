@@ -60,7 +60,7 @@ const PROCESS = [
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="page-enter">
       <Helmet>
         <title>About Us | Montnexus</title>
         <meta
@@ -71,7 +71,7 @@ export default function AboutPage() {
 
       {/* ── Hero ── */}
       <section className="abt-hero">
-        <div className="abt-hero__inner">
+        <div className="abt-hero__inner page-hero-enter">
           <span className="abt-tag">Our Story</span>
           <h1 className="abt-hero__headline">BUILT TO ENGINEER GROWTH</h1>
           <p className="abt-hero__sub">
@@ -170,6 +170,6 @@ export default function AboutPage() {
       </section>
 
       <Contact />
-    </>
+    </div>
   );
 }

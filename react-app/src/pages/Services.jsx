@@ -26,7 +26,7 @@ export default function Services() {
   }, []);
 
   return (
-    <>
+    <div className="page-enter">
       <Helmet>
         <title>Our Services | Montnexus</title>
         <meta name="description" content="Explore Montnexus services — retail automation systems, web design & development, and more." />
@@ -34,7 +34,7 @@ export default function Services() {
 
       {/* Hero */}
       <section className="srv-hero">
-        <div className="srv-hero__inner">
+        <div className="srv-hero__inner page-hero-enter">
           <span className="srv-hero__tag">What We Do</span>
           <h1 className="srv-hero__headline">OUR SERVICES</h1>
           <p className="srv-hero__sub">
@@ -71,6 +71,6 @@ export default function Services() {
       </section>
 
       <Contact />
-    </>
+    </div>
   );
 }

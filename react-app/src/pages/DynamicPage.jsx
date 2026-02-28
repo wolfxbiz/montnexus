@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { usePages } from '../hooks/usePages';
@@ -22,22 +21,59 @@ const SECTION_MAP = {
   text_content:  TextContentSection,
 };
 
+function PageSkeleton() {
+  return (
+    <div className="dp-skeleton">
+      {/* Hero skeleton — dark */}
+      <div className="dp-skeleton__hero">
+        <div className="dp-skeleton__tag" />
+        <div className="dp-skeleton__headline" />
+        <div className="dp-skeleton__sub" />
+        <div className="dp-skeleton__sub dp-skeleton__sub--short" />
+        <div className="dp-skeleton__ctas">
+          <div className="dp-skeleton__btn" />
+          <div className="dp-skeleton__btn dp-skeleton__btn--ghost" />
+        </div>
+      </div>
+      {/* Light section skeleton */}
+      <div className="dp-skeleton__section dp-skeleton__section--light">
+        <div className="dp-skeleton__section-inner">
+          <div className="dp-skeleton__tag dp-skeleton__tag--dark" />
+          <div className="dp-skeleton__title dp-skeleton__title--dark" />
+          <div className="dp-skeleton__grid">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="dp-skeleton__card dp-skeleton__card--light" />
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* Dark section skeleton */}
+      <div className="dp-skeleton__section dp-skeleton__section--dark">
+        <div className="dp-skeleton__section-inner">
+          <div className="dp-skeleton__tag" />
+          <div className="dp-skeleton__title" />
+          <div className="dp-skeleton__grid">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="dp-skeleton__card" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function DynamicPage({ slug: slugProp }) {
   const { slug: slugParam } = useParams();
   const slug = slugProp || slugParam;
 
-  const { page, sections, loading, error, fetchPageBySlug } = usePages();
-
-  useEffect(() => {
-    if (slug) fetchPageBySlug(slug);
-  }, [slug, fetchPageBySlug]);
+  // Pass slug directly so the hook fetches the correct page without a race condition.
+  // Previously, calling usePages() with no args triggered fetchPages() (all pages),
+  // which completed fast and set loading=false + page=null → 404 flash.
+  const { page, sections, loading, error } = usePages(slug ? { slug } : undefined);
 
   if (loading) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 36, height: 36, border: '3px solid rgba(0,0,0,0.08)', borderTopColor: 'var(--primary, #92D108)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error || !page) {
@@ -49,8 +85,6 @@ export default function DynamicPage({ slug: slugProp }) {
     );
   }
 
-  const siteName = document.documentElement.style.getPropertyValue('--site-name') || 'Montnexus';
-
   return (
     <>
       <Helmet>
@@ -60,7 +94,7 @@ export default function DynamicPage({ slug: slugProp }) {
         <meta property="og:title" content={page.meta_title || page.title} />
       </Helmet>
 
-      <div>
+      <div className="dp-page-enter">
         {sections.map((section) => {
           const Component = SECTION_MAP[section.section_type];
           if (!Component) return null;

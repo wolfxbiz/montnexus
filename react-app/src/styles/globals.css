@@ -215,6 +215,53 @@ h4, h5, h6 {
 }
 
 /* ================================
+   PAGE & SECTION ANIMATIONS
+================================ */
+
+/* Scroll-reveal animation (used by RevealWrapper) */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+/* Page entry — fade up, triggered on mount */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: pageEnter 0.45s ease both;
+}
+
+/* Hero section stagger — each direct child fades in */
+.page-hero-enter > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: pageEnter 0.5s ease forwards;
+}
+.page-hero-enter > *:nth-child(1) { animation-delay: 0.05s; }
+.page-hero-enter > *:nth-child(2) { animation-delay: 0.14s; }
+.page-hero-enter > *:nth-child(3) { animation-delay: 0.22s; }
+.page-hero-enter > *:nth-child(4) { animation-delay: 0.30s; }
+.page-hero-enter > *:nth-child(5) { animation-delay: 0.38s; }
+
+/* ================================
    RESPONSIVE UTILITIES
 ================================ */
 @media (max-width: 900px) {

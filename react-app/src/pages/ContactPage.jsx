@@ -28,7 +28,7 @@ const INFO = [
 
 export default function ContactPage() {
   return (
-    <>
+    <div className="page-enter">
       <Helmet>
         <title>Contact Us | Montnexus</title>
         <meta
@@ -39,7 +39,7 @@ export default function ContactPage() {
 
       {/* ── Hero ── */}
       <section className="ctp-hero">
-        <div className="ctp-hero__inner">
+        <div className="ctp-hero__inner page-hero-enter">
           <span className="ctp-tag">Get In Touch</span>
           <h1 className="ctp-hero__headline">LET'S TALK ABOUT YOUR PROJECT</h1>
           <p className="ctp-hero__sub">
@@ -92,6 +92,6 @@ export default function ContactPage() {
 
       {/* ── Contact form (existing component) ── */}
       <Contact />
-    </>
+    </div>
   );
 }

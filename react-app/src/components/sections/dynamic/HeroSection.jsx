@@ -22,7 +22,7 @@ export default function HeroSection({ content = {} }) {
 
   return (
     <section className="dp-hero">
-      <div className="dp-hero-inner">
+      <div className="dp-hero-inner page-hero-enter">
         {tag && <div className="dp-hero-tag">{tag}</div>}
 
         <h1 className="dp-hero-title">{headline}</h1>
