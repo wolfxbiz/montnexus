@@ -1,31 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { siteConfig } from '../../data/siteConfig';
+import { supabase } from '../../lib/supabase';
 import logoMonogram from '../../assets/MNX.png';
 import logoGreen from '../../assets/MNX (1).png';
 import './Navbar.css';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [servicePages, setServicePages] = useState([]);
+  const dropdownRef = useRef(null);
+  const close = () => { setOpen(false); setServicesOpen(false); setMobileServicesOpen(false); };
   const { pathname } = useLocation();
 
-  // True when on any dedicated service page (not the home page)
-  const isServicePage =
-    pathname === '/web-design-development' ||
-    pathname === '/retail-automation-system';
+  useEffect(() => {
+    supabase
+      .from('site_pages')
+      .select('id, title, slug')
+      .eq('status', 'published')
+      .neq('slug', 'home')
+      .order('updated_at', { ascending: false })
+      .then(({ data }) => setServicePages(data || []));
+  }, []);
 
-  // Hash links scroll to sections on the current page when already on a
-  // service page, otherwise they navigate to the matching home-page section.
-  const href = (hash) => isServicePage ? `#${hash}` : `/#${hash}`;
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setServicesOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
-  // 4th nav slot: cross-link to the OTHER service page.
-  // Home + Retail Automation page → Web Design & Development
-  // Web Design & Development page  → Retail Automation & System
-  const serviceLink =
-    pathname === '/web-design-development'
-      ? { to: '/retail-automation-system', label: 'Retail Automation & System' }
-      : { to: '/web-design-development',   label: 'Web Design & Development'   };
+  // Close dropdown on route change
+  useEffect(() => {
+    setServicesOpen(false);
+    setMobileServicesOpen(false);
+  }, [pathname]);
 
   return (
     <header>
@@ -37,15 +52,46 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="nav-links">
-          <li><a href={href('about')}>About</a></li>
-          <li><a href={href('services')}>Services</a></li>
-          <li><a href={href('how')}>How We Work</a></li>
-          <li><Link to={serviceLink.to}>{serviceLink.label}</Link></li>
+          <li><a href="/#about">About</a></li>
+
+          {/* Services dropdown */}
+          <li className="nav-dropdown" ref={dropdownRef}>
+            <button
+              className="nav-dropdown__trigger"
+              aria-expanded={servicesOpen}
+              onClick={() => setServicesOpen(o => !o)}
+            >
+              Services <span className={`nav-dropdown__caret${servicesOpen ? ' open' : ''}`}>▾</span>
+            </button>
+            {servicesOpen && (
+              <div className="nav-dropdown__menu">
+                {servicePages.map(p => (
+                  <Link
+                    key={p.id}
+                    to={`/${p.slug}`}
+                    className="nav-dropdown__item"
+                    onClick={() => setServicesOpen(false)}
+                  >
+                    {p.title}
+                  </Link>
+                ))}
+                <Link
+                  to="/services"
+                  className="nav-dropdown__item nav-dropdown__item--all"
+                  onClick={() => setServicesOpen(false)}
+                >
+                  View All Services →
+                </Link>
+              </div>
+            )}
+          </li>
+
+          <li><a href="/#how">How We Work</a></li>
           <li><Link to="/blog">Blog</Link></li>
         </ul>
 
         <div className="nav-right">
-          <a href={href('contact')} className="btn-primary">Get in Touch</a>
+          <a href="/#contact" className="btn-primary">Get in Touch</a>
         </div>
 
         {/* Mobile hamburger */}
@@ -62,12 +108,28 @@ export default function Navbar() {
       {/* Mobile drawer */}
       <div className={`nav-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
         <ul>
-          <li><a href={href('about')} onClick={close}>About</a></li>
-          <li><a href={href('services')} onClick={close}>Services</a></li>
-          <li><a href={href('how')} onClick={close}>How We Work</a></li>
-          <li><Link to={serviceLink.to} onClick={close}>{serviceLink.label}</Link></li>
+          <li><a href="/#about" onClick={close}>About</a></li>
+          <li className="drawer-services">
+            <button
+              className="drawer-services__toggle"
+              onClick={() => setMobileServicesOpen(o => !o)}
+            >
+              Services <span className={`nav-dropdown__caret${mobileServicesOpen ? ' open' : ''}`}>▾</span>
+            </button>
+            {mobileServicesOpen && (
+              <div className="drawer-services__sub">
+                {servicePages.map(p => (
+                  <Link key={p.id} to={`/${p.slug}`} onClick={close}>{p.title}</Link>
+                ))}
+                <Link to="/services" onClick={close} style={{ fontWeight: 700, color: '#92D108' }}>
+                  View All Services →
+                </Link>
+              </div>
+            )}
+          </li>
+          <li><a href="/#how" onClick={close}>How We Work</a></li>
           <li><Link to="/blog" onClick={close}>Blog</Link></li>
-          <li><a href={href('contact')} className="drawer-cta" onClick={close}>Get in Touch</a></li>
+          <li><a href="/#contact" className="drawer-cta" onClick={close}>Get in Touch</a></li>
         </ul>
       </div>
 

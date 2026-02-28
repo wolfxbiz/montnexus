@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { SiteSettingsProvider } from './hooks/useSiteSettings';
 import DynamicPage from './pages/DynamicPage';
+import Services from './pages/Services';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import AdminLayout from './pages/admin/AdminLayout';
@@ -29,6 +30,9 @@ function AppRoutes() {
         <Route path="/" element={<DynamicPage slug="home" />} />
         <Route path="/retail-automation-system" element={<DynamicPage slug="retail-automation-system" />} />
         <Route path="/web-design-development" element={<DynamicPage slug="web-design-development" />} />
+
+        {/* Services listing */}
+        <Route path="/services" element={<Services />} />
 
         {/* Blog */}
         <Route path="/blog" element={<Blog />} />

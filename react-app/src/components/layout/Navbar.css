@@ -195,6 +195,137 @@ header nav {
   backdrop-filter: blur(2px);
 }
 
+/* ── Services dropdown ── */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown__trigger {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.nav-dropdown__trigger:hover {
+  color: #ffffff;
+}
+
+.nav-dropdown__caret {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform 0.2s;
+  line-height: 1;
+}
+
+.nav-dropdown__caret.open {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 8px;
+  min-width: 220px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  animation: dropdown-in 0.15s ease;
+}
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.nav-dropdown__item {
+  display: block;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.nav-dropdown__item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.nav-dropdown__item--all {
+  margin-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 12px;
+  color: #92D108;
+  font-weight: 700;
+}
+
+.nav-dropdown__item--all:hover {
+  background: rgba(146, 209, 8, 0.08);
+  color: #92D108;
+}
+
+/* ── Mobile drawer services sub-menu ── */
+.drawer-services {
+  list-style: none;
+}
+
+.drawer-services__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #202020;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-family: inherit;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.drawer-services__toggle:hover {
+  background: #f4f4f5;
+}
+
+.drawer-services__sub {
+  padding: 0 8px 8px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drawer-services__sub a {
+  display: block;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #404040;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.drawer-services__sub a:hover {
+  background: #f4f4f5;
+}
+
 /* ── Mobile breakpoint ── */
 @media (max-width: 640px) {
   header nav {

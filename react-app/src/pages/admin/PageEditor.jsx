@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { usePages } from '../../hooks/usePages';
+import HeroSection from '../../components/sections/dynamic/HeroSection';
+import FeaturesGridSection from '../../components/sections/dynamic/FeaturesGridSection';
+import ServicesGridSection from '../../components/sections/dynamic/ServicesGridSection';
+import ProcessStepsSection from '../../components/sections/dynamic/ProcessStepsSection';
+import AboutStripSection from '../../components/sections/dynamic/AboutStripSection';
+import CtaBannerSection from '../../components/sections/dynamic/CtaBannerSection';
+import TextContentSection from '../../components/sections/dynamic/TextContentSection';
+import '../../styles/DynamicPage.css';
 
 const SECTION_TYPES = [
   { type: 'hero', label: 'Hero', desc: 'Full-width hero with headline, CTAs, and stats' },
@@ -242,6 +250,16 @@ function SectionForm({ sectionType, content, onChange }) {
   return <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>No form for section type: {sectionType}</p>;
 }
 
+const SECTION_RENDERERS = {
+  hero: HeroSection,
+  features_grid: FeaturesGridSection,
+  services_grid: ServicesGridSection,
+  process_steps: ProcessStepsSection,
+  about_strip: AboutStripSection,
+  cta_banner: CtaBannerSection,
+  text_content: TextContentSection,
+};
+
 // ── Main Component ────────────────────────────────────────────
 
 export default function PageEditor() {
@@ -422,16 +440,20 @@ export default function PageEditor() {
       <div className="admin-content">
         {/* Tabs */}
         <div style={{ display: 'flex', gap: 0, marginBottom: 24, borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          {['content', 'seo'].map(tab => (
+          {[
+            { key: 'content', label: 'Content' },
+            { key: 'preview', label: 'Preview' },
+            { key: 'seo', label: 'SEO & Status' },
+          ].map(tab => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
               style={{
                 padding: '10px 20px',
                 background: 'none',
                 border: 'none',
-                borderBottom: `2px solid ${activeTab === tab ? '#92D108' : 'transparent'}`,
-                color: activeTab === tab ? '#92D108' : 'rgba(255,255,255,0.4)',
+                borderBottom: `2px solid ${activeTab === tab.key ? '#92D108' : 'transparent'}`,
+                color: activeTab === tab.key ? '#92D108' : 'rgba(255,255,255,0.4)',
                 fontWeight: 700,
                 fontSize: 13,
                 letterSpacing: '0.06em',
@@ -440,7 +462,7 @@ export default function PageEditor() {
                 transition: 'color 0.2s',
               }}
             >
-              {tab === 'content' ? 'Content' : 'SEO & Status'}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -508,6 +530,48 @@ export default function PageEditor() {
             >
               + Add Section
             </button>
+          </div>
+        )}
+
+        {/* Preview Tab */}
+        {activeTab === 'preview' && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', margin: 0 }}>
+                Live preview of your page content. Unsaved edits to the open section are shown here.
+              </p>
+              {page.status === 'published' && (
+                <a
+                  href={`/${page.slug === 'home' ? '' : page.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="admin-action-btn"
+                  style={{ flexShrink: 0 }}
+                >
+                  Open Live Page ↗
+                </a>
+              )}
+            </div>
+            {/* Preview frame */}
+            <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+              {sections.length === 0 ? (
+                <div style={{ padding: '60px 32px', textAlign: 'center', color: '#52525b', fontSize: 14 }}>
+                  No sections yet. Add sections in the Content tab.
+                </div>
+              ) : (
+                sections.map(section => {
+                  const content = editingId === section.id ? editContent : section.content;
+                  const Renderer = SECTION_RENDERERS[section.section_type];
+                  return Renderer ? (
+                    <Renderer key={section.id} content={content} />
+                  ) : (
+                    <div key={section.id} style={{ padding: '20px 24px', background: '#f4f4f5', fontSize: 13, color: '#52525b' }}>
+                      Unknown section type: {section.section_type}
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
         )}
 
