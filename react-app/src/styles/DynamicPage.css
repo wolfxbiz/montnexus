@@ -549,6 +549,30 @@
 .dp-text-content li { margin-bottom: 6px; }
 
 /* ================================================================
+   ORPHAN GRID ITEM STRETCHING
+   When the last item is alone or paired in its row, stretch it
+   to fill the available columns rather than leaving empty space.
+================================================================ */
+
+/* 3-column grids: process steps, services, features-3 */
+.dp-process-grid > *:last-child:nth-child(3n + 1),
+.dp-services-grid > *:last-child:nth-child(3n + 1),
+.dp-features-grid--3 > *:last-child:nth-child(3n + 1) {
+  grid-column: 1 / -1; /* alone in row → full width */
+}
+
+.dp-process-grid > *:last-child:nth-child(3n + 2),
+.dp-services-grid > *:last-child:nth-child(3n + 2),
+.dp-features-grid--3 > *:last-child:nth-child(3n + 2) {
+  grid-column: span 2; /* second in row → fill remaining 2 */
+}
+
+/* 2-column features grid */
+.dp-features-grid > *:last-child:nth-child(2n + 1) {
+  grid-column: 1 / -1; /* alone in row → full width */
+}
+
+/* ================================================================
    RESPONSIVE
 ================================================================ */
 @media (max-width: 900px) {

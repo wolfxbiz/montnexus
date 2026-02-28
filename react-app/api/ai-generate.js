@@ -86,7 +86,8 @@ Return ONLY the markdown content, no extra explanation.`,
   return { content, title, excerpt };
 }
 
-async function generateSEO({ title, content, excerpt }) {
+async function generateSEO({ title, content, excerpt, is_page = false }) {
+  const contentType = is_page ? 'website page' : 'blog post';
   const message = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 600,
@@ -94,16 +95,22 @@ async function generateSEO({ title, content, excerpt }) {
     messages: [
       {
         role: 'user',
-        content: `Analyze this blog post and generate SEO metadata.
+        content: `Analyze this ${contentType} and generate SEO metadata that accurately reflects the actual content.
 
 Title: ${title}
-Excerpt: ${excerpt}
-Content preview: ${content.substring(0, 500)}
+${excerpt ? `Key message: ${excerpt}` : ''}
+Page content summary:
+${content.substring(0, 700)}
+
+Generate SEO metadata that:
+- Accurately reflects what this specific page is about
+- Includes the most important keywords from the content
+- Is compelling and click-worthy
 
 Return a JSON object (no markdown, just raw JSON) with:
 {
   "meta_title": "SEO-optimized title under 60 chars",
-  "meta_description": "Compelling meta description 150-160 chars",
+  "meta_description": "Compelling, specific meta description 150-160 chars",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"]
 }`,
       },
@@ -111,7 +118,6 @@ Return a JSON object (no markdown, just raw JSON) with:
   });
 
   const text = message.content[0].text.trim();
-  // Strip markdown code fences if present
   const json = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '').trim();
   return JSON.parse(json);
 }

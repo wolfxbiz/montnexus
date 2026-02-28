@@ -490,16 +490,40 @@ export default function PageEditor() {
   const handleGenerateSEO = async () => {
     if (!page) return;
     setSeoSaving(true);
-    const firstSection = sections[0];
-    const context = firstSection ? JSON.stringify(firstSection.content).substring(0, 300) : page.title;
+
+    // Build human-readable content summary from all sections
+    const contentSummary = sections.map(s => {
+      const c = s.content || {};
+      return [
+        c.tag, c.headline, c.title, c.subheadline,
+        c.body ? c.body.substring(0, 200) : null,
+        ...(c.items || []).map(i => `${i.title || ''}: ${i.description || ''}`),
+        ...(c.services || []).map(i => `${i.title || ''}: ${i.description || ''}`),
+        ...(c.steps || []).map(i => `${i.title || ''}: ${i.description || ''}`),
+      ].filter(Boolean).join('. ');
+    }).join('\n').substring(0, 900);
+
+    const heroSection = sections.find(s => s.section_type === 'hero');
+    const excerpt = heroSection?.content?.subheadline || heroSection?.content?.body?.substring(0, 160) || '';
+
     try {
       const res = await fetch('/api/ai-generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'seo', title: page.title, content: context, excerpt: '' }),
+        body: JSON.stringify({
+          action: 'seo',
+          title: page.title,
+          content: contentSummary,
+          excerpt,
+          is_page: true,
+        }),
       });
       const data = await res.json();
-      setSeoForm(prev => ({ ...prev, meta_title: data.meta_title || prev.meta_title, meta_description: data.meta_description || prev.meta_description }));
+      setSeoForm(prev => ({
+        ...prev,
+        meta_title: data.meta_title || prev.meta_title,
+        meta_description: data.meta_description || prev.meta_description,
+      }));
     } catch (err) {
       alert('SEO generation failed: ' + err.message);
     } finally {
