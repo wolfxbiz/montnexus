@@ -16,6 +16,8 @@ import AdminPages from './pages/admin/AdminPages';
 import PageCreator from './pages/admin/PageCreator';
 import PageEditor from './pages/admin/PageEditor';
 import AdminSettings from './pages/admin/AdminSettings';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 
 function AppRoutes() {
   const location = useLocation();
@@ -30,6 +32,10 @@ function AppRoutes() {
         <Route path="/" element={<DynamicPage slug="home" />} />
         <Route path="/retail-automation-system" element={<DynamicPage slug="retail-automation-system" />} />
         <Route path="/web-design-development" element={<DynamicPage slug="web-design-development" />} />
+
+        {/* Core pages */}
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         {/* Services listing */}
         <Route path="/services" element={<Services />} />

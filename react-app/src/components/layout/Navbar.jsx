@@ -20,7 +20,7 @@ export default function Navbar() {
       .from('site_pages')
       .select('id, title, slug')
       .eq('status', 'published')
-      .neq('slug', 'home')
+      .not('slug', 'in', '("home","about","contact","services")')
       .order('updated_at', { ascending: false })
       .then(({ data }) => setServicePages(data || []));
   }, []);
@@ -52,7 +52,7 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="nav-links">
-          <li><a href="/#about">About</a></li>
+          <li><Link to="/about">About</Link></li>
 
           {/* Services dropdown */}
           <li className="nav-dropdown" ref={dropdownRef}>
@@ -91,7 +91,7 @@ export default function Navbar() {
         </ul>
 
         <div className="nav-right">
-          <a href="/#contact" className="btn-primary">Get in Touch</a>
+          <Link to="/contact" className="btn-primary">Get in Touch</Link>
         </div>
 
         {/* Mobile hamburger */}
@@ -108,7 +108,7 @@ export default function Navbar() {
       {/* Mobile drawer */}
       <div className={`nav-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
         <ul>
-          <li><a href="/#about" onClick={close}>About</a></li>
+          <li><Link to="/about" onClick={close}>About</Link></li>
           <li className="drawer-services">
             <button
               className="drawer-services__toggle"
@@ -129,7 +129,7 @@ export default function Navbar() {
           </li>
           <li><a href="/#how" onClick={close}>How We Work</a></li>
           <li><Link to="/blog" onClick={close}>Blog</Link></li>
-          <li><a href="/#contact" className="drawer-cta" onClick={close}>Get in Touch</a></li>
+          <li><Link to="/contact" className="drawer-cta" onClick={close}>Get in Touch</Link></li>
         </ul>
       </div>
 

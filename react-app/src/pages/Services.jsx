@@ -16,6 +16,8 @@ export default function Services() {
       .eq('status', 'published')
       .neq('slug', 'home')
       .neq('slug', 'services')
+      .neq('slug', 'about')
+      .neq('slug', 'contact')
       .order('updated_at', { ascending: false })
       .then(({ data }) => {
         setPages(data || []);
