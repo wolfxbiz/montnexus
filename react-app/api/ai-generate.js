@@ -33,6 +33,9 @@ export default async function handler(req, res) {
       case 'section_content':
         result = await generateSectionContent(payload);
         break;
+      case 'page_regen':
+        result = await regeneratePageContent(payload);
+        break;
       default:
         return res.status(400).json({ error: `Unknown action: ${action}` });
     }
@@ -194,6 +197,84 @@ Tone: ${tone}
 Required JSON schema: ${schema}
 
 Return ONLY valid JSON matching that schema exactly (no markdown fences).`,
+      },
+    ],
+  });
+
+  const text = message.content[0].text.trim();
+  const json = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(json);
+}
+
+async function regeneratePageContent({
+  page_title,
+  page_type = 'service',
+  current_sections = [],
+  available_services = [],
+  extra_instructions = '',
+  tone = 'professional',
+}) {
+  const SCHEMAS = `
+Section type schemas (use EXACTLY these keys):
+- "hero": { tag, headline, subheadline, cta_primary:{text,link}, cta_secondary:{text,link}, stats:[{number,label}] }
+- "features_grid": { tag, title, body, items:[{number,tag,title,description,features:[],link}] }
+- "services_grid": { tag, title, body, services:[{number,title,description,features:[]}] }
+- "process_steps": { tag, title, body, steps:[{number,title,description}] }
+- "about_strip": { tag, title, body, stats:[{number,label}] }
+- "cta_banner": { headline, body, cta_text, cta_link, email }
+- "text_content": { tag, title, body }`;
+
+  const servicesContext = available_services.length > 0
+    ? `Available service pages on this site:\n${available_services.map(s => `- "${s.title}" at /${s.slug}${s.meta_description ? ': ' + s.meta_description : ''}`).join('\n')}`
+    : 'No additional service pages on this site yet.';
+
+  const sectionList = current_sections.length > 0
+    ? `Preserve this section order and types: ${current_sections.join(' → ')}`
+    : 'Choose the most appropriate 4-5 sections for this page type.';
+
+  const pageContext = {
+    core_home: 'This is the main home/landing page. It should give an overview of all services and link to specific service pages.',
+    core_about: 'This is the About Us page. Focus on company story, team values, process, and culture.',
+    core_contact: 'This is the Contact Us page. Focus on getting visitors to reach out, with contact options and reassurance.',
+    service: `This is a service detail page for "${page_title}". Focus deeply on this specific service, its benefits, process, and results.`,
+    other: `This is a landing page titled "${page_title}". Optimize for conversion and clarity.`,
+  }[page_type === 'core' ? `core_${page_title.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z_]/g, '')}` : page_type]
+    || `This page is titled "${page_title}".`;
+
+  const message = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 3500,
+    messages: [
+      {
+        role: 'user',
+        content: `Regenerate optimized content for this website page.
+
+Page: "${page_title}"
+Context: ${pageContext}
+Tone: ${tone}
+
+${servicesContext}
+
+${sectionList}
+
+${extra_instructions ? `Additional instructions: ${extra_instructions}` : ''}
+
+${SCHEMAS}
+
+Important:
+- For the home page, reference the available service pages and include their links in CTAs/features
+- Use compelling, conversion-focused copy
+- Keep stats realistic and impactful
+- CTAs should link to /#contact or specific service pages
+
+Return ONLY valid JSON (no markdown fences):
+{
+  "sections": [
+    {"section_type": "hero", "content": {...}},
+    {"section_type": "features_grid", "content": {...}},
+    ...
+  ]
+}`,
       },
     ],
   });

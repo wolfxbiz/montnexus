@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { usePages } from '../../hooks/usePages';
+import { supabase } from '../../lib/supabase';
 import HeroSection from '../../components/sections/dynamic/HeroSection';
 import FeaturesGridSection from '../../components/sections/dynamic/FeaturesGridSection';
 import ServicesGridSection from '../../components/sections/dynamic/ServicesGridSection';
@@ -310,6 +311,78 @@ export default function PageEditor() {
     }
   };
 
+  // ── Full page regeneration ────────────────────────────────
+  const [showFullRegen, setShowFullRegen] = useState(false);
+  const [regenInstructions, setRegenInstructions] = useState('');
+  const [regenTone, setRegenTone] = useState('professional');
+  const [regenLoading, setRegenLoading] = useState(false);
+  const [regenPreview, setRegenPreview] = useState(null); // { sections: [] }
+  const [regenError, setRegenError] = useState('');
+  const [servicePages, setServicePages] = useState([]);
+  const [applyingRegen, setApplyingRegen] = useState(false);
+
+  // Fetch service pages for context when regen panel opens
+  useEffect(() => {
+    if (!showFullRegen) return;
+    supabase
+      .from('site_pages')
+      .select('id, title, slug, meta_description')
+      .eq('status', 'published')
+      .neq('slug', page?.slug || '')
+      .then(({ data }) => setServicePages(data || []));
+  }, [showFullRegen, page?.slug]);
+
+  const handleFullRegenerate = async () => {
+    setRegenLoading(true);
+    setRegenError('');
+    setRegenPreview(null);
+    try {
+      const res = await fetch('/api/ai-generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'page_regen',
+          page_title: page.title,
+          page_type: page.page_type || 'service',
+          current_sections: sections.map(s => s.section_type),
+          available_services: servicePages,
+          extra_instructions: regenInstructions,
+          tone: regenTone,
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setRegenPreview(data);
+    } catch (err) {
+      setRegenError(err.message || 'Generation failed. Try again.');
+    } finally {
+      setRegenLoading(false);
+    }
+  };
+
+  const handleApplyRegen = async () => {
+    if (!regenPreview?.sections?.length) return;
+    setApplyingRegen(true);
+    try {
+      // Delete all existing sections
+      for (const s of sections) {
+        await deleteSection(s.id);
+      }
+      // Add new sections from AI
+      for (let i = 0; i < regenPreview.sections.length; i++) {
+        const sec = regenPreview.sections[i];
+        await addSection(id, sec.section_type, sec.content, i);
+      }
+      setShowFullRegen(false);
+      setRegenPreview(null);
+      setRegenInstructions('');
+    } catch (err) {
+      alert('Failed to apply: ' + err.message);
+    } finally {
+      setApplyingRegen(false);
+    }
+  };
+
   useEffect(() => {
     if (id) fetchPageById(id);
   }, [id, fetchPageById]);
@@ -544,6 +617,132 @@ export default function PageEditor() {
         {/* Content Tab */}
         {activeTab === 'content' && (
           <div>
+            {/* Full page regen trigger */}
+            {!showFullRegen ? (
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+                <button
+                  onClick={() => setShowFullRegen(true)}
+                  style={{
+                    background: 'rgba(146,209,8,0.08)', border: '1px solid rgba(146,209,8,0.2)',
+                    borderRadius: 8, padding: '8px 16px', color: '#92D108', cursor: 'pointer',
+                    fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6,
+                  }}
+                >
+                  ✦ Regenerate Full Page with AI
+                </button>
+              </div>
+            ) : (
+              /* Full regen panel */
+              <div style={{ background: '#1a1a1a', border: '1px solid rgba(146,209,8,0.2)', borderRadius: 12, padding: '20px 20px 24px', marginBottom: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: '#92D108', margin: '0 0 4px' }}>✦ Regenerate Full Page with AI</p>
+                    <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', margin: 0 }}>
+                      AI will rewrite all sections, using your other pages as context for optimal linking and messaging.
+                    </p>
+                  </div>
+                  <button onClick={() => { setShowFullRegen(false); setRegenPreview(null); setRegenError(''); }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', fontSize: 18 }}>×</button>
+                </div>
+
+                {/* Context pages */}
+                {servicePages.length > 0 && (
+                  <div className="admin-form-group">
+                    <label className="ai-panel__label">Pages used as AI context</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {servicePages.map(p => (
+                        <span key={p.id} style={{ fontSize: 11, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 99, padding: '3px 10px', color: 'rgba(255,255,255,0.5)' }}>
+                          /{p.slug} — {p.title}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px', gap: 12 }}>
+                  <div className="admin-form-group" style={{ margin: 0 }}>
+                    <label className="ai-panel__label">Additional instructions (optional)</label>
+                    <textarea
+                      className="admin-textarea"
+                      rows={2}
+                      placeholder={`e.g. "Emphasize our retail automation services" or "Use more industry statistics"`}
+                      value={regenInstructions}
+                      onChange={e => setRegenInstructions(e.target.value)}
+                      style={{ fontSize: 13 }}
+                    />
+                  </div>
+                  <div className="admin-form-group" style={{ margin: 0 }}>
+                    <label className="ai-panel__label">Tone</label>
+                    <select className="admin-select" value={regenTone} onChange={e => setRegenTone(e.target.value)}>
+                      <option value="professional">Professional</option>
+                      <option value="friendly">Friendly</option>
+                      <option value="bold">Bold</option>
+                      <option value="luxury">Luxury</option>
+                      <option value="minimal">Minimal</option>
+                    </select>
+                  </div>
+                </div>
+
+                {regenError && (
+                  <div style={{ background: 'rgba(220,38,38,0.1)', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#f87171', marginTop: 12 }}>
+                    {regenError}
+                  </div>
+                )}
+
+                {/* Generated preview */}
+                {regenPreview && (
+                  <div style={{ marginTop: 16 }}>
+                    <p style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+                      Generated — {regenPreview.sections.length} sections
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
+                      {regenPreview.sections.map((s, i) => (
+                        <div key={i} style={{ background: '#111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', minWidth: 110 }}>{s.section_type}</span>
+                          <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {s.content?.headline || s.content?.title || s.content?.tag || '—'}
+                          </span>
+                          <span style={{ fontSize: 11, color: '#92D108', fontWeight: 700, flexShrink: 0 }}>✓ Ready</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                      <button
+                        onClick={handleApplyRegen}
+                        className="admin-btn-primary"
+                        style={{ width: 'auto' }}
+                        disabled={applyingRegen}
+                      >
+                        {applyingRegen ? 'Applying…' : 'Apply — Replace All Sections'}
+                      </button>
+                      <button
+                        onClick={() => { setRegenPreview(null); setRegenError(''); }}
+                        className="admin-btn-secondary"
+                        disabled={applyingRegen}
+                      >
+                        Regenerate Again
+                      </button>
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>This will replace all current sections</span>
+                    </div>
+                  </div>
+                )}
+
+                {!regenPreview && (
+                  <div style={{ marginTop: 14 }}>
+                    <button
+                      onClick={handleFullRegenerate}
+                      className="admin-btn-primary ai-generate-btn"
+                      style={{ width: 'auto' }}
+                      disabled={regenLoading}
+                    >
+                      {regenLoading ? (
+                        <><div className="ai-spinner" /> Generating page content…</>
+                      ) : '✦ Generate Now'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Sections list */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
               {sections.map((section, idx) => (

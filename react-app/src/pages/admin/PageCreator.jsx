@@ -21,6 +21,7 @@ export default function PageCreator() {
   const { createPage, addSection } = usePages();
 
   const [step, setStep] = useState(1);
+  const [pageType, setPageType] = useState('service');
   const [form, setForm] = useState({
     businessName: '',
     businessDescription: '',
@@ -79,6 +80,7 @@ export default function PageCreator() {
         title: pageTitle,
         slug: pageSlug,
         status,
+        page_type: pageType,
         meta_title: generated?.meta_title || pageTitle,
         meta_description: generated?.meta_description || '',
       });
@@ -142,6 +144,18 @@ export default function PageCreator() {
                   onChange={e => setField('businessDescription', e.target.value)}
                   rows={5}
                 />
+              </div>
+
+              <div className="admin-form-group">
+                <label className="ai-panel__label">Page Category</label>
+                <select
+                  className="admin-select"
+                  value={pageType}
+                  onChange={e => setPageType(e.target.value)}
+                >
+                  <option value="service">Service Page — appears in Services dropdown &amp; /services listing</option>
+                  <option value="other">Other / Landing Page — standalone, not in Services</option>
+                </select>
               </div>
 
               <div className="admin-form-group">
