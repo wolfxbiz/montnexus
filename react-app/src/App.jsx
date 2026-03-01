@@ -16,8 +16,17 @@ import AdminPages from './pages/admin/AdminPages';
 import PageCreator from './pages/admin/PageCreator';
 import PageEditor from './pages/admin/PageEditor';
 import AdminSettings from './pages/admin/AdminSettings';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
+import CrmDashboard from './pages/admin/crm/CrmDashboard';
+import CrmLeads from './pages/admin/crm/CrmLeads';
+import LeadEditor from './pages/admin/crm/LeadEditor';
+import CrmClients from './pages/admin/crm/CrmClients';
+import ClientEditor from './pages/admin/crm/ClientEditor';
+import CrmProposals from './pages/admin/crm/CrmProposals';
+import ProposalEditor from './pages/admin/crm/ProposalEditor';
+import CrmInvoices from './pages/admin/crm/CrmInvoices';
+import InvoiceEditor from './pages/admin/crm/InvoiceEditor';
+import CrmCampaigns from './pages/admin/crm/CrmCampaigns';
+import CampaignEditor from './pages/admin/crm/CampaignEditor';
 
 function AppRoutes() {
   const location = useLocation();
@@ -33,9 +42,9 @@ function AppRoutes() {
         <Route path="/retail-automation-system" element={<DynamicPage slug="retail-automation-system" />} />
         <Route path="/web-design-development" element={<DynamicPage slug="web-design-development" />} />
 
-        {/* Core pages */}
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        {/* Core pages — CMS-managed via DynamicPage */}
+        <Route path="/about" element={<DynamicPage slug="about" />} />
+        <Route path="/contact" element={<DynamicPage slug="contact" />} />
 
         {/* Services listing */}
         <Route path="/services" element={<Services />} />
@@ -56,6 +65,24 @@ function AppRoutes() {
           <Route path="pages/new" element={<PageCreator />} />
           <Route path="pages/:id/edit" element={<PageEditor />} />
           <Route path="settings" element={<AdminSettings />} />
+
+          {/* CRM routes */}
+          <Route path="crm" element={<CrmDashboard />} />
+          <Route path="crm/leads" element={<CrmLeads />} />
+          <Route path="crm/leads/new" element={<LeadEditor />} />
+          <Route path="crm/leads/:id" element={<LeadEditor />} />
+          <Route path="crm/clients" element={<CrmClients />} />
+          <Route path="crm/clients/new" element={<ClientEditor />} />
+          <Route path="crm/clients/:id" element={<ClientEditor />} />
+          <Route path="crm/proposals" element={<CrmProposals />} />
+          <Route path="crm/proposals/new" element={<ProposalEditor />} />
+          <Route path="crm/proposals/:id/edit" element={<ProposalEditor />} />
+          <Route path="crm/invoices" element={<CrmInvoices />} />
+          <Route path="crm/invoices/new" element={<InvoiceEditor />} />
+          <Route path="crm/invoices/:id/edit" element={<InvoiceEditor />} />
+          <Route path="crm/campaigns" element={<CrmCampaigns />} />
+          <Route path="crm/campaigns/new" element={<CampaignEditor />} />
+          <Route path="crm/campaigns/:id/edit" element={<CampaignEditor />} />
         </Route>
 
         {/* CMS catch-all — any new page slug created in admin */}

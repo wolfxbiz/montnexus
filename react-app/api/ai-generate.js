@@ -36,6 +36,12 @@ export default async function handler(req, res) {
       case 'page_regen':
         result = await regeneratePageContent(payload);
         break;
+      case 'proposal_draft':
+        result = await generateProposalDraft(payload);
+        break;
+      case 'campaign_draft':
+        result = await generateCampaignDraft(payload);
+        break;
       default:
         return res.status(400).json({ error: `Unknown action: ${action}` });
     }
@@ -316,4 +322,71 @@ Return a JSON object (no markdown, just raw JSON) with:
   const text = message.content[0].text.trim();
   const json = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '').trim();
   return JSON.parse(json);
+}
+
+// ── CRM: Proposal draft ───────────────────────────────────────────────────
+async function generateProposalDraft({ lead_name, company, message, services = [], tone = 'professional' }) {
+  const servicesCtx = services.length > 0 ? `\nOur relevant services: ${services.join(', ')}` : '';
+
+  const msg = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 2000,
+    system: SYSTEM_PROMPT,
+    messages: [{
+      role: 'user',
+      content: `Write a professional business proposal for the following client enquiry.
+
+Client: ${lead_name}${company ? ` (${company})` : ''}
+Enquiry: ${message || 'General enquiry about our services'}${servicesCtx}
+Tone: ${tone}
+
+Write a complete HTML proposal with these sections:
+1. Executive Summary
+2. Understanding of Your Needs
+3. Our Proposed Solution
+4. Deliverables & Timeline (simple HTML table with inline border styles)
+5. Investment (placeholder table — client will fill in actual values)
+6. Why Montnexus
+7. Next Steps
+
+Use <h2> for section headers, <p> for paragraphs, <ul>/<li> for lists. No CSS classes. No <html>/<body> tags. Return ONLY the HTML content, no explanation.`,
+    }],
+  });
+
+  return { content: msg.content[0].text.trim() };
+}
+
+// ── CRM: Campaign draft ───────────────────────────────────────────────────
+async function generateCampaignDraft({ topic, tone = 'professional', recipient_type = 'all_leads' }) {
+  const audienceMap = {
+    all_leads: 'potential clients who have shown interest in our services',
+    qualified_leads: 'qualified leads who are evaluating our services',
+    all_clients: 'existing clients who work with us',
+    custom: 'a specific audience',
+  };
+  const audience = audienceMap[recipient_type] || 'our audience';
+
+  const msg = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1500,
+    system: SYSTEM_PROMPT,
+    messages: [{
+      role: 'user',
+      content: `Write a professional email newsletter for the following topic.
+
+Topic: ${topic}
+Audience: ${audience}
+Tone: ${tone}
+
+Write clean HTML email body content (no <html>/<body> tags). Include:
+1. A compelling opening paragraph
+2. 2-3 key insight sections with <h3> headings
+3. A CTA button: <a href="#" style="background:#92D108;color:#111;padding:10px 24px;border-radius:6px;font-weight:700;text-decoration:none;display:inline-block;margin:16px 0;">Get in Touch</a>
+4. A brief sign-off
+
+Use <h3> for section titles, <p> for paragraphs. No CSS classes. Return ONLY the HTML content, no explanation.`,
+    }],
+  });
+
+  return { content: msg.content[0].text.trim() };
 }

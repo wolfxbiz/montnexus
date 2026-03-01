@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════════
--- Migration: add page_type + seed About Us and Contact Us pages
+-- Migration: add page_type + seed About Us, Contact Us, Services pages
 -- Run in Supabase SQL Editor (safe to re-run — uses IF NOT EXISTS / ON CONFLICT)
 -- ════════════════════════════════════════════════════════════════════════
 
@@ -33,7 +33,7 @@ select id, 'hero', 0, '{
   "headline": "BUILT TO ENGINEER GROWTH",
   "subheadline": "Montnexus is a technology company focused on retail automation and digital experiences. We help businesses scale through intelligent systems and purposeful design.",
   "cta_primary": {"text": "Our Services", "link": "/services"},
-  "cta_secondary": {"text": "Get in Touch", "link": "/#contact"},
+  "cta_secondary": {"text": "Get in Touch", "link": "/contact"},
   "stats": [
     {"number": "50+", "label": "Projects Delivered"},
     {"number": "5+", "label": "Years Experience"},
@@ -74,7 +74,7 @@ select id, 'cta_banner', 3, '{
   "headline": "Ready to Work Together?",
   "body": "Tell us about your business and we will engineer a solution that fits.",
   "cta_text": "Start a Project",
-  "cta_link": "/#contact",
+  "cta_link": "/contact",
   "email": "hello@montnexus.com"
 }'::jsonb
 from about_page;
@@ -98,7 +98,7 @@ select id, 'hero', 0, '{
   "tag": "Get In Touch",
   "headline": "LET US TALK ABOUT YOUR PROJECT",
   "subheadline": "Whether you need a retail automation system or a complete digital presence, we are ready to help. Reach out and let us start the conversation.",
-  "cta_primary": {"text": "Send a Message", "link": "/#contact"},
+  "cta_primary": {"text": "Send a Message", "link": "#contact"},
   "cta_secondary": {"text": "View Services", "link": "/services"},
   "stats": [
     {"number": "24h", "label": "Response Time"},
@@ -120,7 +120,7 @@ select id, 'features_grid', 1, '{
       "title": "Free Consultation",
       "description": "Not sure what you need? Book a free 30-minute discovery call and we will help you figure out the best path forward.",
       "features": ["No commitment required", "Get expert advice", "Walk away with a clear plan"],
-      "link": "/#contact"
+      "link": "#contact"
     },
     {
       "number": "02",
@@ -128,7 +128,7 @@ select id, 'features_grid', 1, '{
       "title": "Start a Project",
       "description": "Have a clear scope? Share the details and we will send you a proposal within 48 hours.",
       "features": ["Fixed-scope delivery", "Clear milestones", "Dedicated team"],
-      "link": "/#contact"
+      "link": "#contact"
     },
     {
       "number": "03",
@@ -136,7 +136,7 @@ select id, 'features_grid', 1, '{
       "title": "Retainer Support",
       "description": "Need ongoing development or maintenance? We offer monthly retainer plans for long-term partnerships.",
       "features": ["Priority support", "Monthly hours", "Regular reviews"],
-      "link": "/#contact"
+      "link": "#contact"
     }
   ]
 }'::jsonb
@@ -147,7 +147,21 @@ select id, 'cta_banner', 2, '{
   "headline": "We Respond Within 24 Hours",
   "body": "Drop us a message using the form below and our team will get back to you with a clear plan.",
   "cta_text": "Send a Message",
-  "cta_link": "/#contact",
+  "cta_link": "#contact",
   "email": "hello@montnexus.com"
 }'::jsonb
 from contact_page;
+
+-- ── Services listing page ─────────────────────────────────────────────────
+-- This gives the /services route a DB record so it appears in the admin CMS.
+-- The page is rendered by Services.jsx (dynamic listing), not DynamicPage.
+insert into public.site_pages (title, slug, status, page_type, meta_title, meta_description)
+values (
+  'Services',
+  'services',
+  'published',
+  'core',
+  'Our Services | Montnexus',
+  'Explore Montnexus services — retail automation systems, web design & development, and more.'
+)
+on conflict (slug) do nothing;

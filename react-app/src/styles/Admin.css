@@ -786,3 +786,391 @@
   background: rgba(220, 38, 38, 0.1) !important;
   border-color: rgba(248, 113, 113, 0.4) !important;
 }
+
+/* ================================
+   CRM — PIPELINE TABS
+================================ */
+.crm-pipeline-tabs {
+  display: flex;
+  gap: 4px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.crm-tab-btn {
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.crm-tab-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.crm-tab-btn.active {
+  background: rgba(146, 209, 8, 0.12);
+  color: var(--green);
+}
+
+/* ================================
+   CRM — STATUS BADGES
+================================ */
+.crm-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  text-transform: capitalize;
+  letter-spacing: 0.03em;
+}
+
+.crm-status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.crm-status--new {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+.crm-status--contacted {
+  background: rgba(234, 179, 8, 0.12);
+  color: #facc15;
+}
+
+.crm-status--qualified {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+}
+
+.crm-status--proposal_sent, .crm-status--sent {
+  background: rgba(249, 115, 22, 0.12);
+  color: #fb923c;
+}
+
+.crm-status--won, .crm-status--accepted, .crm-status--paid {
+  background: rgba(146, 209, 8, 0.12);
+  color: var(--green);
+}
+
+.crm-status--lost, .crm-status--rejected, .crm-status--cancelled {
+  background: rgba(220, 38, 38, 0.1);
+  color: #f87171;
+}
+
+.crm-status--draft {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.crm-status--viewed {
+  background: rgba(20, 184, 166, 0.12);
+  color: #2dd4bf;
+}
+
+.crm-status--overdue {
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+}
+
+/* ================================
+   CRM — SOURCE BADGE
+================================ */
+.crm-source-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.crm-source--website_form  { background: rgba(59, 130, 246, 0.1);  color: #60a5fa; }
+.crm-source--instagram     { background: rgba(236, 72, 153, 0.1);  color: #f472b6; }
+.crm-source--facebook      { background: rgba(59, 130, 246, 0.12); color: #818cf8; }
+.crm-source--linkedin      { background: rgba(14, 165, 233, 0.1);  color: #38bdf8; }
+.crm-source--referral      { background: rgba(168, 85, 247, 0.1);  color: #c084fc; }
+.crm-source--csv_import    { background: rgba(234, 179, 8, 0.1);   color: #facc15; }
+
+/* ================================
+   CRM — ACTIVITY LOG
+================================ */
+.crm-activity-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.crm-activity-item {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 16px;
+}
+
+.crm-activity-item:not(:last-child) .crm-activity-line {
+  position: absolute;
+  left: 11px;
+  top: 24px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.crm-activity-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #222;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.crm-activity-content {
+  flex: 1;
+}
+
+.crm-activity-meta {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 2px;
+}
+
+.crm-activity-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+/* ================================
+   CRM — STATS ROW
+================================ */
+.crm-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1100px) {
+  .crm-stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .crm-stats-row { grid-template-columns: 1fr; }
+}
+
+.crm-stat-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.crm-stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+}
+
+.crm-stat-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: #e4e4e7;
+  letter-spacing: 0.02em;
+}
+
+.crm-stat-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 2px;
+}
+
+/* ================================
+   CRM — QUICK ACTIONS
+================================ */
+.crm-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .crm-quick-actions { grid-template-columns: repeat(2, 1fr); }
+}
+
+.crm-quick-action {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-align: left;
+}
+
+.crm-quick-action:hover {
+  border-color: rgba(146, 209, 8, 0.3);
+  background: rgba(146, 209, 8, 0.04);
+}
+
+.crm-quick-action__icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.crm-quick-action__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e4e4e7;
+}
+
+.crm-quick-action__desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ================================
+   CRM — INVOICE LINE ITEMS TABLE
+================================ */
+.crm-invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.crm-invoice-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.crm-invoice-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.8);
+  vertical-align: middle;
+}
+
+.crm-invoice-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.crm-invoice-totals {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.crm-invoice-total-row {
+  display: flex;
+  gap: 32px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.crm-invoice-total-row.total {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e4e4e7;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.crm-invoice-total-row span:last-child {
+  min-width: 100px;
+  text-align: right;
+}
+
+/* ================================
+   CRM — ADMIN PANEL TITLE
+================================ */
+.admin-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+/* ================================
+   PRINT — INVOICE PDF
+================================ */
+@media print {
+  .admin-sidebar,
+  .admin-topbar,
+  .no-print {
+    display: none !important;
+  }
+
+  .admin-main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .admin-content {
+    padding: 0 !important;
+  }
+
+  .invoice-print-area {
+    display: block !important;
+    width: 100%;
+    color: #111;
+    background: #fff;
+    font-size: 13px;
+  }
+
+  .admin-root {
+    background: #fff !important;
+  }
+}

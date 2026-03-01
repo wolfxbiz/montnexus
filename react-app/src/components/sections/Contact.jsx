@@ -35,6 +35,11 @@ export default function Contact() {
       if (data.success) {
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });
+        fetch('/api/crm-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: formData.name, email: formData.email, message: formData.message, source: 'website_form' }),
+        }).catch(() => {});
       } else {
         setStatus('error');
       }
