@@ -18,7 +18,22 @@
       "Bash(git push:*)",
       "Bash(wc -l src/**/*.jsx src/**/*.js)",
       "Bash(npx vercel --version)",
-      "Bash(dir \"/c/Users/vimal/montnexus/react-app/src/styles\")"
+      "Bash(dir \"/c/Users/vimal/montnexus/react-app/src/styles\")",
+      "Bash(vercel env add SMTP_PORT production --value \"465\" --yes)",
+      "Bash(vercel env add SMTP_USER production --value \"hello@montnexus.com\" --yes)",
+      "Bash(vercel env add SMTP_PASS production --value \"04718137871221\" --yes)",
+      "Bash(vercel env add SMTP_FROM production --value \"Montnexus <hello@montnexus.com>\" --yes)",
+      "Bash(vercel env ls production)",
+      "Bash(vercel ls --limit 3)",
+      "Bash(vercel ls)",
+      "Bash(gh run list --limit 3)",
+      "Bash(vercel inspect --logs)",
+      "Bash(vercel project ls)",
+      "Bash(vercel link --project montnexus --yes)",
+      "Bash(vercel env add SMTP_HOST production --value \"smtpout.secureserver.net\" --yes)",
+      "Bash(vercel --prod --yes)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{time_total}s\" \"https://vurvyyhbjvhuiqwmjmpu.supabase.co/rest/v1/site_pages?select=id&limit=1\" -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ1cnZ5eWhianZodWlxd21qbXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNjAwMzQsImV4cCI6MjA4NzczNjAzNH0.5id6S8EdRcdChyD4UhO-gdpH29QEgixEboxGGUFndj8\")",
+      "Bash(vercel inspect montnexus-lsj4qfvsp-viveks-projects-6b5017fa.vercel.app --logs)"
     ],
     "additionalDirectories": [
       "C:\\Users\\vimal\\montnexus",
