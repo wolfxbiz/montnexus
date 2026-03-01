@@ -72,13 +72,18 @@ function useSiteSettingsInternal() {
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    const { data } = await supabase.from('site_settings').select('key, value');
-    if (data && data.length > 0) {
-      const obj = Object.fromEntries(data.map(r => [r.key, r.value]));
-      const merged = { ...DEFAULTS, ...obj };
-      setSettings(merged);
-      applySettingsToDOM(merged);
-    } else {
+    try {
+      const res = await fetch('/api/settings');
+      const data = res.ok ? await res.json() : [];
+      if (data && data.length > 0) {
+        const obj = Object.fromEntries(data.map(r => [r.key, r.value]));
+        const merged = { ...DEFAULTS, ...obj };
+        setSettings(merged);
+        applySettingsToDOM(merged);
+      } else {
+        applySettingsToDOM(DEFAULTS);
+      }
+    } catch {
       applySettingsToDOM(DEFAULTS);
     }
     setLoading(false);

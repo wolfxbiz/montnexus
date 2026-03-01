@@ -22,27 +22,27 @@ export function usePages({ slug, id } = {}) {
   const fetchPageBySlug = useCallback(async (pageSlug) => {
     setLoading(true);
     setError(null);
-    const { data: pageData, error: pageErr } = await supabase
-      .from('site_pages')
-      .select('*')
-      .eq('slug', pageSlug)
-      .single();
-    if (pageErr || !pageData) {
+    try {
+      const res = await fetch(`/api/page?slug=${encodeURIComponent(pageSlug)}`);
+      if (!res.ok) {
+        setPage(null);
+        setSections([]);
+        setError('Page not found');
+        setLoading(false);
+        return null;
+      }
+      const { page: pageData, sections: sectionData } = await res.json();
+      setPage(pageData);
+      setSections(sectionData || []);
+      setLoading(false);
+      return { page: pageData, sections: sectionData || [] };
+    } catch (err) {
       setPage(null);
       setSections([]);
-      setError(pageErr?.message || 'Page not found');
+      setError(err.message);
       setLoading(false);
       return null;
     }
-    const { data: sectionData } = await supabase
-      .from('page_sections')
-      .select('*')
-      .eq('page_id', pageData.id)
-      .order('display_order', { ascending: true });
-    setPage(pageData);
-    setSections(sectionData || []);
-    setLoading(false);
-    return { page: pageData, sections: sectionData || [] };
   }, []);
 
   const fetchPageById = useCallback(async (pageId) => {
