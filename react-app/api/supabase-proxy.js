@@ -1,20 +1,18 @@
-// Generic Supabase proxy — forwards ALL Supabase REST/Auth calls server-side.
-// Fixes Indian ISP routing issues where direct browser→Supabase connections fail.
-// The Supabase client in supabase.js rewrites all URLs to go through this endpoint.
+// Generic Supabase proxy — single-file endpoint that receives the full path as a query param.
+// Avoids catch-all [...path] routing issues on Vercel.
+// Client sends: /api/supabase-proxy?target=/rest/v1/blog_posts?select=*&order=...
 
 export default async function handler(req, res) {
-  const { path, ...queryParams } = req.query;
-  const supabasePath = Array.isArray(path) ? path.join('/') : (path || '');
+  const target = req.query.target;
+  if (!target) return res.status(400).json({ error: 'target required' });
 
-  const qs = new URLSearchParams(queryParams).toString();
-  const targetUrl = `${process.env.VITE_SUPABASE_URL}/${supabasePath}${qs ? '?' + qs : ''}`;
+  const targetUrl = `${process.env.VITE_SUPABASE_URL}${target}`;
 
-  // Forward Supabase-relevant headers from the client request
+  // Forward Supabase-relevant headers
   const headers = {};
   for (const h of ['authorization', 'apikey', 'prefer', 'range', 'accept-profile', 'content-profile', 'x-client-info']) {
     if (req.headers[h]) headers[h] = req.headers[h];
   }
-  // Always ensure apikey is set (Supabase requires it)
   if (!headers['apikey']) headers['apikey'] = process.env.VITE_SUPABASE_ANON_KEY;
   if (req.body) headers['content-type'] = 'application/json';
 

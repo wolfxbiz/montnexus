@@ -3,9 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
 
-// Production: route all Supabase calls through the Vercel serverless proxy
-// (/api/supabase/...) so they never hit the network directly from the browser.
-// This fixes Indian ISP routing issues that block direct connections to supabase.co.
+// Production: route all Supabase calls through Vercel serverless proxy.
+// Browser sends to /api/supabase-proxy?target=/rest/v1/... (same domain, no ISP block).
 // Development: connect directly (use VPN if on a restricted network).
 const proxyFetch = import.meta.env.PROD
   ? (input, init) => {
@@ -14,7 +13,8 @@ const proxyFetch = import.meta.env.PROD
         : input instanceof URL ? input.toString()
         : input.url;
       if (url.startsWith(SUPABASE_URL)) {
-        return fetch('/api/supabase' + url.slice(SUPABASE_URL.length), init);
+        const targetPath = url.slice(SUPABASE_URL.length);
+        return fetch(`/api/supabase-proxy?target=${encodeURIComponent(targetPath)}`, init);
       }
       return fetch(input, init);
     }
