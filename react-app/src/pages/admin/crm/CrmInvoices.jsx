@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useInvoices } from '../../../hooks/crm/useInvoices';
+import { useRole } from '../../../hooks/useRole';
 
 const CURRENCY_SYMBOLS = { INR: '₹', AED: 'AED ', USD: '$', EUR: '€' };
 
@@ -9,7 +10,9 @@ function isOverdue(inv) {
 }
 
 export default function CrmInvoices() {
+  const { can, loading: roleLoading } = useRole();
   const { invoices, loading, fetchInvoices, deleteInvoice } = useInvoices();
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
 
   useEffect(() => { fetchInvoices(); }, []);
 

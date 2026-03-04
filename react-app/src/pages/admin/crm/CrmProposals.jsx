@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useProposals } from '../../../hooks/crm/useProposals';
+import { useRole } from '../../../hooks/useRole';
 
 const CURRENCY_SYMBOLS = { INR: '₹', AED: 'AED ', USD: '$', EUR: '€' };
 
 export default function CrmProposals() {
+  const { can, loading: roleLoading } = useRole();
   const { proposals, loading, fetchProposals, deleteProposal } = useProposals();
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
 
   useEffect(() => { fetchProposals(); }, []);
 

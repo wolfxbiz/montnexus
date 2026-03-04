@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
+import { useRole } from '../../../hooks/useRole';
 
 export default function CrmDashboard() {
+  const { can, loading: roleLoading } = useRole();
   const [stats, setStats] = useState({ leads: 0, newLeads: 0, clients: 0, unpaidTotal: 0 });
   const [recentLeads, setRecentLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
 
   useEffect(() => {
     async function load() {

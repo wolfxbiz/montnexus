@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useClients } from '../../../hooks/crm/useClients';
+import { useRole } from '../../../hooks/useRole';
 
 export default function CrmClients() {
+  const { can, loading: roleLoading } = useRole();
   const { clients, loading, fetchClients, deleteClient } = useClients();
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
 
   useEffect(() => { fetchClients(); }, []);
 

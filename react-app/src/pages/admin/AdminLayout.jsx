@@ -1,117 +1,71 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useAdminTheme } from '../../hooks/useAdminTheme';
+import { useRole } from '../../hooks/useRole';
 import '../../styles/Admin.css';
 
-function LayoutIcon({ name }) {
+function Icon({ name }) {
   const icons = {
-    dashboard: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm8-3a1 1 0 00-1 1v2H7a1 1 0 000 2h2v2a1 1 0 002 0v-2h2a1 1 0 000-2h-2V8a1 1 0 00-1-1z"/>
-      </svg>
-    ),
-    crm: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zm6 4a1 1 0 011-1h2a1 1 0 011 1v8a1 1 0 01-1 1H9a1 1 0 01-1-1V8zm6-3a1 1 0 011-1h2a1 1 0 011 1v11a1 1 0 01-1 1h-2a1 1 0 01-1-1V5z"/>
-      </svg>
-    ),
-    leads: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-      </svg>
-    ),
-    clients: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd"/>
-        <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"/>
-      </svg>
-    ),
-    proposals: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd"/>
-      </svg>
-    ),
-    invoices: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd"/>
-      </svg>
-    ),
-    campaigns: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-      </svg>
-    ),
-    posts: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd"/>
-      </svg>
-    ),
-    new: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd"/>
-      </svg>
-    ),
-    blog: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
-        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
-      </svg>
-    ),
-    socials: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
-      </svg>
-    ),
-    pages: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
-      </svg>
-    ),
-    settings: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"/>
-      </svg>
-    ),
-    sun: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd"/>
-      </svg>
-    ),
-    moon: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-      </svg>
-    ),
-    monitor: (
-      <svg viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd"/>
-      </svg>
-    ),
+    dashboard: <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm8-3a1 1 0 00-1 1v2H7a1 1 0 000 2h2v2a1 1 0 002 0v-2h2a1 1 0 000-2h-2V8a1 1 0 00-1-1z"/></svg>,
+    crm:       <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zm6 4a1 1 0 011-1h2a1 1 0 011 1v8a1 1 0 01-1 1H9a1 1 0 01-1-1V8zm6-3a1 1 0 011-1h2a1 1 0 011 1v11a1 1 0 01-1 1h-2a1 1 0 01-1-1V5z"/></svg>,
+    leads:     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>,
+    clients:   <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd"/><path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"/></svg>,
+    proposals: <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd"/></svg>,
+    invoices:  <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd"/></svg>,
+    campaigns: <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>,
+    posts:     <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd"/></svg>,
+    new:       <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd"/></svg>,
+    blog:      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>,
+    socials:   <svg viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg>,
+    pages:     <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/></svg>,
+    settings:  <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"/></svg>,
+    team:      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>,
+    sun:       <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd"/></svg>,
+    moon:      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>,
+    monitor:   <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd"/></svg>,
+    hamburger: <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/></svg>,
   };
   return icons[name] || null;
 }
 
+function NavItem({ to, icon, children, end = false, onClick }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}
+      onClick={onClick}
+    >
+      <Icon name={icon} />
+      {children}
+    </NavLink>
+  );
+}
+
 export default function AdminLayout() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { preference, setTheme } = useAdminTheme();
+  const { can, isSuperAdmin, loading: roleLoading } = useRole();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const isLoginPage = location.pathname === '/admin/login';
 
+  // Close sidebar on route change
+  useEffect(() => { setSidebarOpen(false); }, [location.pathname]);
+
   useEffect(() => {
-    if (!loading && !user && !isLoginPage) {
+    if (!authLoading && !user && !isLoginPage) {
       navigate('/admin/login', { replace: true });
     }
-  }, [user, loading, isLoginPage, navigate]);
+  }, [user, authLoading, isLoginPage, navigate]);
 
-  if (isLoginPage) {
-    return <Outlet />;
-  }
+  if (isLoginPage) return <Outlet />;
 
-  if (loading) {
+  if (authLoading || roleLoading) {
     return (
       <div className="admin-root" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
         <div className="admin-spinner" />
@@ -126,123 +80,89 @@ export default function AdminLayout() {
     navigate('/admin/login');
   };
 
+  const closeSidebar = () => setSidebarOpen(false);
+
+  // Show all sections while roleLoading (fallback to show), hide after loaded
+  const showContent  = roleLoading || can('content');
+  const showPages    = roleLoading || can('pages');
+  const showCrm      = roleLoading || can('crm');
+  const showSettings = roleLoading || can('settings');
+  const showTeam     = roleLoading || isSuperAdmin;
+
   return (
     <div className="admin-layout admin-root">
+      {/* Sidebar overlay (mobile) */}
+      {sidebarOpen && (
+        <div className="admin-sidebar-overlay admin-sidebar-overlay--open" onClick={closeSidebar} />
+      )}
+
       {/* Sidebar */}
-      <aside className="admin-sidebar">
+      <aside className={`admin-sidebar${sidebarOpen ? ' admin-sidebar--open' : ''}`} style={{ position: 'relative' }}>
+        {/* Close button (mobile only) */}
+        <button className="admin-sidebar__close" onClick={closeSidebar} aria-label="Close menu">✕</button>
+
         <div className="admin-sidebar__logo">
           MNX
           <span>Content Manager</span>
         </div>
 
         <nav className="admin-nav">
-          <span className="admin-nav__section">Content</span>
+          {showContent && (
+            <>
+              <span className="admin-nav__section">Content</span>
+              <NavItem to="/admin/posts" icon="posts" onClick={closeSidebar}>All Posts</NavItem>
+              <NavItem to="/admin/posts/new" icon="new" onClick={closeSidebar}>New Post</NavItem>
+              <NavItem to="/admin/socials" icon="socials" onClick={closeSidebar}>Social Media</NavItem>
+            </>
+          )}
 
-          <NavLink to="/admin/posts" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="posts" />
-            All Posts
-          </NavLink>
+          {showPages && (
+            <>
+              <span className="admin-nav__section">Pages</span>
+              <NavItem to="/admin/pages" icon="pages" onClick={closeSidebar}>All Pages</NavItem>
+              <NavItem to="/admin/pages/new" icon="new" onClick={closeSidebar}>New Page</NavItem>
+            </>
+          )}
 
-          <NavLink to="/admin/posts/new" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="new" />
-            New Post
-          </NavLink>
+          {showCrm && (
+            <>
+              <span className="admin-nav__section">CRM</span>
+              <NavItem to="/admin/crm" icon="crm" end onClick={closeSidebar}>Dashboard</NavItem>
+              <NavItem to="/admin/crm/leads" icon="leads" onClick={closeSidebar}>Leads</NavItem>
+              <NavItem to="/admin/crm/clients" icon="clients" onClick={closeSidebar}>Clients</NavItem>
+              <NavItem to="/admin/crm/proposals" icon="proposals" onClick={closeSidebar}>Proposals</NavItem>
+              <NavItem to="/admin/crm/invoices" icon="invoices" onClick={closeSidebar}>Invoices</NavItem>
+              <NavItem to="/admin/crm/campaigns" icon="campaigns" onClick={closeSidebar}>Campaigns</NavItem>
+            </>
+          )}
 
-          <NavLink to="/admin/socials" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="socials" />
-            Social Media
-          </NavLink>
+          <span className="admin-nav__section">Admin</span>
 
-          <span className="admin-nav__section">Pages</span>
+          {showSettings && (
+            <NavItem to="/admin/settings" icon="settings" onClick={closeSidebar}>Settings</NavItem>
+          )}
 
-          <NavLink to="/admin/pages" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="pages" />
-            All Pages
-          </NavLink>
-
-          <NavLink to="/admin/pages/new" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="new" />
-            New Page
-          </NavLink>
-
-          <span className="admin-nav__section">CRM</span>
-
-          <NavLink to="/admin/crm" end className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="crm" />
-            Dashboard
-          </NavLink>
-
-          <NavLink to="/admin/crm/leads" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="leads" />
-            Leads
-          </NavLink>
-
-          <NavLink to="/admin/crm/clients" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="clients" />
-            Clients
-          </NavLink>
-
-          <NavLink to="/admin/crm/proposals" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="proposals" />
-            Proposals
-          </NavLink>
-
-          <NavLink to="/admin/crm/invoices" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="invoices" />
-            Invoices
-          </NavLink>
-
-          <NavLink to="/admin/crm/campaigns" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="campaigns" />
-            Campaigns
-          </NavLink>
-
-          <span className="admin-nav__section">Design</span>
-
-          <NavLink to="/admin/settings" className={({ isActive }) => `admin-nav-link${isActive ? ' active' : ''}`}>
-            <LayoutIcon name="settings" />
-            Settings
-          </NavLink>
+          {showTeam && (
+            <NavItem to="/admin/team" icon="team" onClick={closeSidebar}>Team</NavItem>
+          )}
 
           <span className="admin-nav__section">Site</span>
 
           <a href="/blog" target="_blank" rel="noopener noreferrer" className="admin-nav-link">
-            <LayoutIcon name="blog" />
-            View Blog ↗
+            <Icon name="blog" />View Blog ↗
           </a>
-
           <a href="/" target="_blank" rel="noopener noreferrer" className="admin-nav-link">
-            <LayoutIcon name="dashboard" />
-            View Site ↗
+            <Icon name="dashboard" />View Site ↗
           </a>
         </nav>
 
         <div className="admin-sidebar__footer">
           {/* Theme toggle */}
           <div className="admin-theme-toggle" title="Theme">
-            <button
-              className={`admin-theme-btn${preference === 'light' ? ' active' : ''}`}
-              onClick={() => setTheme('light')}
-              title="Light"
-            >
-              <LayoutIcon name="sun" />
-            </button>
-            <button
-              className={`admin-theme-btn${preference === 'system' ? ' active' : ''}`}
-              onClick={() => setTheme('system')}
-              title="System"
-            >
-              <LayoutIcon name="monitor" />
-            </button>
-            <button
-              className={`admin-theme-btn${preference === 'dark' ? ' active' : ''}`}
-              onClick={() => setTheme('dark')}
-              title="Dark"
-            >
-              <LayoutIcon name="moon" />
-            </button>
+            <button className={`admin-theme-btn${preference === 'light'  ? ' active' : ''}`} onClick={() => setTheme('light')}  title="Light"><Icon name="sun" /></button>
+            <button className={`admin-theme-btn${preference === 'system' ? ' active' : ''}`} onClick={() => setTheme('system')} title="System"><Icon name="monitor" /></button>
+            <button className={`admin-theme-btn${preference === 'dark'   ? ' active' : ''}`} onClick={() => setTheme('dark')}   title="Dark"><Icon name="moon" /></button>
           </div>
-
           <button className="admin-btn-secondary" style={{ width: '100%' }} onClick={handleLogout}>
             Sign Out
           </button>
@@ -251,6 +171,17 @@ export default function AdminLayout() {
 
       {/* Main */}
       <main className="admin-main">
+        {/* Mobile topbar strip with hamburger */}
+        <div className="admin-mobile-topbar">
+          <button
+            className="admin-hamburger"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open menu"
+          >
+            <Icon name="hamburger" />
+          </button>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 18, color: 'var(--green)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>MNX</span>
+        </div>
         <Outlet />
       </main>
     </div>

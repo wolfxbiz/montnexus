@@ -16,6 +16,7 @@ import AdminPages from './pages/admin/AdminPages';
 import PageCreator from './pages/admin/PageCreator';
 import PageEditor from './pages/admin/PageEditor';
 import AdminSettings from './pages/admin/AdminSettings';
+import TeamManagement from './pages/admin/TeamManagement';
 import CrmDashboard from './pages/admin/crm/CrmDashboard';
 import CrmLeads from './pages/admin/crm/CrmLeads';
 import LeadEditor from './pages/admin/crm/LeadEditor';
@@ -65,6 +66,7 @@ function AppRoutes() {
           <Route path="pages/new" element={<PageCreator />} />
           <Route path="pages/:id/edit" element={<PageEditor />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="team" element={<TeamManagement />} />
 
           {/* CRM routes */}
           <Route path="crm" element={<CrmDashboard />} />

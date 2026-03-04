@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { usePosts } from '../../hooks/usePosts';
+import { useRole } from '../../hooks/useRole';
 
 export default function AdminDashboard() {
+  const { can, loading: roleLoading } = useRole();
   const { posts, loading, error, deletePost } = usePosts();
   const navigate = useNavigate();
   const [deletingId, setDeletingId] = useState(null);
+  if (!roleLoading && !can('content')) return <Navigate to="/admin/crm" replace />;
 
   const total = posts.length;
   const published = posts.filter(p => p.status === 'published').length;

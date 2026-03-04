@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useSiteSettings, GOOGLE_FONTS } from '../../hooks/useSiteSettings';
+import { useRole } from '../../hooks/useRole';
 
 const BODY_FONTS = ['Noto Sans', ...GOOGLE_FONTS.filter(f => f !== 'Barlow Condensed')];
 
@@ -28,10 +30,12 @@ function ColorField({ label, settingKey, value, onChange }) {
 }
 
 export default function AdminSettings() {
+  const { can, loading: roleLoading } = useRole();
   const { settings, saveAllSettings, loading } = useSiteSettings();
   const [local, setLocal] = useState({});
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
+  if (!roleLoading && !can('settings')) return <Navigate to="/admin" replace />;
 
   useEffect(() => {
     if (!loading) setLocal({ ...settings });

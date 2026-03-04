@@ -868,10 +868,144 @@
   border: 1px solid rgba(220,38,38,0.15);
 }
 
-/* Mobile sidebar toggle */
+/* ================================
+   MOBILE RESPONSIVE
+================================ */
+.admin-mobile-topbar {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--admin-bg-alt);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--admin-hover-strong);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--admin-text);
+}
+
+.admin-hamburger svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--admin-overlay);
+  z-index: 99;
+  backdrop-filter: blur(2px);
+}
+
+.admin-sidebar__close {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--admin-hover-strong);
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--admin-text-muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Tables always scroll horizontally on overflow */
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+/* Responsive field rows */
+@media (max-width: 640px) {
+  .admin-field-row {
+    grid-template-columns: 1fr;
+  }
+  .admin-content {
+    padding: 16px;
+  }
+  .admin-topbar {
+    padding: 12px 16px;
+  }
+}
+
 @media (max-width: 768px) {
-  .admin-sidebar { display: none; }
-  .admin-layout { flex-direction: column; }
+  /* Sidebar becomes a slide-in drawer */
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    display: flex; /* override the hide rule */
+    overflow-y: auto;
+  }
+
+  .admin-sidebar--open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  }
+
+  .admin-sidebar-overlay--open {
+    display: block;
+  }
+
+  .admin-sidebar__close {
+    display: flex;
+  }
+
+  .admin-hamburger {
+    display: flex;
+  }
+
+  .admin-mobile-topbar {
+    display: flex;
+  }
+
+  .admin-main {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  /* Stack topbar on very small screens */
+  .admin-topbar {
+    gap: 10px;
+  }
+
+  /* Compact stats on mobile */
+  .crm-stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .crm-quick-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Editor goes single column */
+  .admin-editor {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ================================
@@ -1373,4 +1507,62 @@
     border: none !important;
     box-shadow: none !important;
   }
+}
+
+/* ================================
+   TEAM MANAGEMENT
+================================ */
+.team-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--admin-active-bg);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.team-role-guide {
+  background: var(--admin-hover);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 4px;
+}
+
+.team-role-desc {
+  font-size: 13px;
+  color: var(--admin-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.team-role-desc strong {
+  color: var(--admin-text);
+}
+
+.team-role-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .team-role-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .team-role-grid { grid-template-columns: 1fr; }
+}
+
+.team-role-card {
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  padding: 14px;
 }

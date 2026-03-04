@@ -1,13 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import { useLeads } from '../../../hooks/crm/useLeads';
+import { useRole } from '../../../hooks/useRole';
 
 const STATUSES = ['all', 'new', 'contacted', 'qualified', 'proposal_sent', 'won', 'lost'];
 const REQUIRED_CSV_COLS = ['name', 'email'];
 
 export default function CrmLeads() {
+  const { can, loading: roleLoading } = useRole();
   const { leads, loading, fetchLeads, deleteLead, bulkCreateLeads } = useLeads();
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
   const [filter, setFilter] = useState('all');
   const [csvModal, setCsvModal] = useState(false);
   const [csvRows, setCsvRows] = useState([]);

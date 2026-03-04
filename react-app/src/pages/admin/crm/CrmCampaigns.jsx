@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useCampaigns } from '../../../hooks/crm/useCampaigns';
+import { useRole } from '../../../hooks/useRole';
 
 export default function CrmCampaigns() {
+  const { can, loading: roleLoading } = useRole();
   const { campaigns, loading, fetchCampaigns, deleteCampaign } = useCampaigns();
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
 
   useEffect(() => { fetchCampaigns(); }, []);
 
