@@ -68,13 +68,16 @@ ON CONFLICT (email) DO UPDATE SET role = 'super_admin', status = 'active';
 -- ════════════════════════════════════════════════════════════════════════
 
 -- ── blog posts ────────────────────────────────────────────────────────────
-DROP POLICY IF EXISTS "posts write team" ON public.posts;
-CREATE POLICY "posts write team" ON public.posts
+-- Drop old blanket "authenticated" write policy, keep the public read policy
+DROP POLICY IF EXISTS "Authenticated full access" ON public.blog_posts;
+DROP POLICY IF EXISTS "posts write team" ON public.blog_posts;
+CREATE POLICY "posts write team" ON public.blog_posts
   FOR ALL USING (
     public.get_my_role() IN ('super_admin','admin','content_manager')
   );
 
 -- ── site_pages ────────────────────────────────────────────────────────────
+DROP POLICY IF EXISTS "Auth write site_pages" ON public.site_pages;
 DROP POLICY IF EXISTS "pages write team" ON public.site_pages;
 CREATE POLICY "pages write team" ON public.site_pages
   FOR ALL USING (
@@ -82,6 +85,7 @@ CREATE POLICY "pages write team" ON public.site_pages
   );
 
 -- ── page_sections ─────────────────────────────────────────────────────────
+DROP POLICY IF EXISTS "Auth write page_sections" ON public.page_sections;
 DROP POLICY IF EXISTS "sections write team" ON public.page_sections;
 CREATE POLICY "sections write team" ON public.page_sections
   FOR ALL USING (
@@ -89,6 +93,7 @@ CREATE POLICY "sections write team" ON public.page_sections
   );
 
 -- ── site_settings ─────────────────────────────────────────────────────────
+DROP POLICY IF EXISTS "Auth write site_settings" ON public.site_settings;
 DROP POLICY IF EXISTS "settings write team" ON public.site_settings;
 CREATE POLICY "settings write team" ON public.site_settings
   FOR ALL USING (
@@ -96,6 +101,14 @@ CREATE POLICY "settings write team" ON public.site_settings
   );
 
 -- ── CRM tables ────────────────────────────────────────────────────────────
+-- Drop old blanket "authenticated" policies, then create role-based ones
+DROP POLICY IF EXISTS "admin_all_leads"      ON public.crm_leads;
+DROP POLICY IF EXISTS "admin_all_clients"    ON public.crm_clients;
+DROP POLICY IF EXISTS "admin_all_proposals"  ON public.crm_proposals;
+DROP POLICY IF EXISTS "admin_all_invoices"   ON public.crm_invoices;
+DROP POLICY IF EXISTS "admin_all_campaigns"  ON public.crm_campaigns;
+DROP POLICY IF EXISTS "admin_all_activities" ON public.crm_activities;
+
 DO $$
 DECLARE
   t text;

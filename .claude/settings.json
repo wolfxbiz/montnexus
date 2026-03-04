@@ -33,7 +33,17 @@
       "Bash(vercel env add SMTP_HOST production --value \"smtpout.secureserver.net\" --yes)",
       "Bash(vercel --prod --yes)",
       "Bash(curl -s -o /dev/null -w \"%{http_code} %{time_total}s\" \"https://vurvyyhbjvhuiqwmjmpu.supabase.co/rest/v1/site_pages?select=id&limit=1\" -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ1cnZ5eWhianZodWlxd21qbXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNjAwMzQsImV4cCI6MjA4NzczNjAzNH0.5id6S8EdRcdChyD4UhO-gdpH29QEgixEboxGGUFndj8\")",
-      "Bash(vercel inspect montnexus-lsj4qfvsp-viveks-projects-6b5017fa.vercel.app --logs)"
+      "Bash(vercel inspect montnexus-lsj4qfvsp-viveks-projects-6b5017fa.vercel.app --logs)",
+      "Bash(vercel logs --prod)",
+      "Bash(vercel env rm VITE_SUPABASE_ANON_KEY --yes)",
+      "Bash(vercel env add VITE_SUPABASE_ANON_KEY production)",
+      "Bash(vercel env add VITE_SUPABASE_ANON_KEY preview)",
+      "Bash(vercel env add VITE_SUPABASE_ANON_KEY development)",
+      "Bash(vercel env add VITE_SUPABASE_ANON_KEY preview --yes)",
+      "Bash(vercel --yes)",
+      "Bash(vercel deploy --prod)",
+      "Bash(vercel inspect montnexus-akq6h6ddy-viveks-projects-6b5017fa.vercel.app)",
+      "Bash(vercel logs montnexus-akq6h6ddy-viveks-projects-6b5017fa.vercel.app)"
     ],
     "additionalDirectories": [
       "C:\\Users\\vimal\\montnexus",
