@@ -26,8 +26,8 @@ export function useRole() {
       .select('role, status')
       .eq('user_id', user.id)
       .single();
-    if (error && error.code !== 'PGRST116') {
-      // Table doesn't exist yet (migration not run) — grant full access as safe fallback
+    if (error) {
+      // Table not found OR user not in team_members yet — grant full access
       setRole('super_admin');
     } else {
       setRole(data?.status === 'active' ? data.role : null);
