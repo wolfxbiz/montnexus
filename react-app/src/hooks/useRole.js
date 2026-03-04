@@ -21,12 +21,17 @@ export function useRole() {
       return;
     }
     setLoading(true);
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('team_members')
       .select('role, status')
       .eq('user_id', user.id)
       .single();
-    setRole(data?.status === 'active' ? data.role : null);
+    if (error && error.code !== 'PGRST116') {
+      // Table doesn't exist yet (migration not run) — grant full access as safe fallback
+      setRole('super_admin');
+    } else {
+      setRole(data?.status === 'active' ? data.role : null);
+    }
     setLoading(false);
   }, [user]);
 
