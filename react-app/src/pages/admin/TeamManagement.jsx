@@ -55,13 +55,13 @@ export default function TeamManagement() {
     try {
       // Get current session token to send with request
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch('/api/team-invite', {
+      const res = await fetch('/api/team', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ type: 'invite', ...form }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -79,13 +79,13 @@ export default function TeamManagement() {
     setActionError('');
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch('/api/team-update', {
+      const res = await fetch('/api/team', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ memberId, action, role }),
+        body: JSON.stringify({ type: 'update', memberId, action, role }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);

@@ -20,10 +20,10 @@ export function useTeam() {
 
   const inviteMember = useCallback(async (email, name, role) => {
     setError('');
-    const res = await fetch('/api/team-invite', {
+    const res = await fetch('/api/team', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name, role }),
+      body: JSON.stringify({ type: 'invite', email, name, role }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Invite failed');
@@ -33,10 +33,10 @@ export function useTeam() {
 
   const updateMember = useCallback(async (memberId, action, role = null) => {
     setError('');
-    const res = await fetch('/api/team-update', {
+    const res = await fetch('/api/team', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ memberId, action, role }),
+      body: JSON.stringify({ type: 'update', memberId, action, role }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Update failed');

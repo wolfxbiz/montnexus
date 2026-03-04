@@ -25,7 +25,7 @@ const PLATFORMS = [
     color: '#0077b5',
     icon: 'in',
     envBased: false,
-    oauthPath: '/api/social/oauth-linkedin',
+    oauthPath: '/api/social/oauth?platform=linkedin',
     setupSteps: [
       'Go to linkedin.com/developers → Create App',
       'Products tab → Request "Share on LinkedIn" + "Sign In with LinkedIn using OpenID Connect"',
@@ -40,7 +40,7 @@ const PLATFORMS = [
     color: '#1877f2',
     icon: 'f',
     envBased: false,
-    oauthPath: '/api/social/oauth-facebook',
+    oauthPath: '/api/social/oauth?platform=facebook',
     setupSteps: [
       'Go to developers.facebook.com → Create App → Business type',
       'Add Products: Facebook Login + Instagram Graph API',
