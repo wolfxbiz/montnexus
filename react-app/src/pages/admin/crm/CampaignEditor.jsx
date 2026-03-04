@@ -104,7 +104,7 @@ export default function CampaignEditor() {
       <div className="admin-topbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link to="/admin/crm/campaigns" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>← Campaigns</Link>
-          <h1 className="admin-topbar-title">{isNew ? 'New Campaign' : (form.name || 'Edit Campaign')}</h1>
+          <h1 className="admin-topbar__title">{isNew ? 'New Campaign' : (form.name || 'Edit Campaign')}</h1>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           <button className="admin-btn-secondary" onClick={() => setPreview(p => !p)}>{preview ? 'Edit' : 'Preview'}</button>

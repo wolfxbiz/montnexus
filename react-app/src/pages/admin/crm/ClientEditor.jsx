@@ -64,7 +64,7 @@ export default function ClientEditor() {
       <div className="admin-topbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link to="/admin/crm/clients" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>← Clients</Link>
-          <h1 className="admin-topbar-title">{isNew ? 'New Client' : (form.name || 'Edit Client')}</h1>
+          <h1 className="admin-topbar__title">{isNew ? 'New Client' : (form.name || 'Edit Client')}</h1>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           {!isNew && <Link to={`/admin/crm/invoices/new?client=${id}`} className="admin-btn-secondary">+ New Invoice</Link>}

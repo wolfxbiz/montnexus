@@ -4,12 +4,10 @@ import Papa from 'papaparse';
 import { useLeads } from '../../../hooks/crm/useLeads';
 
 const STATUSES = ['all', 'new', 'contacted', 'qualified', 'proposal_sent', 'won', 'lost'];
-const STATUS_COLORS = { new: '#3b82f6', contacted: '#eab308', qualified: '#a855f7', proposal_sent: '#f97316', won: '#92D108', lost: '#71717a' };
-
 const REQUIRED_CSV_COLS = ['name', 'email'];
 
 export default function CrmLeads() {
-  const { leads, loading, fetchLeads, createLead, deleteLead, bulkCreateLeads } = useLeads();
+  const { leads, loading, fetchLeads, deleteLead, bulkCreateLeads } = useLeads();
   const [filter, setFilter] = useState('all');
   const [csvModal, setCsvModal] = useState(false);
   const [csvRows, setCsvRows] = useState([]);
@@ -73,18 +71,24 @@ export default function CrmLeads() {
   return (
     <div className="admin-content">
       <div className="admin-topbar">
-        <h1 className="admin-topbar-title">Leads</h1>
+        <h1 className="admin-topbar__title">Leads</h1>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="admin-btn-secondary" onClick={() => { setCsvModal(true); setCsvRows([]); setCsvError(''); }}>Import CSV</button>
+          <button className="admin-btn-secondary" onClick={() => { setCsvModal(true); setCsvRows([]); setCsvError(''); }}>
+            Import CSV
+          </button>
           <Link to="/admin/crm/leads/new" className="admin-btn-primary">+ New Lead</Link>
         </div>
       </div>
 
-      {/* Pipeline filter tabs */}
+      {/* Pipeline filter */}
       <div className="crm-pipeline-tabs">
         {STATUSES.map(s => (
-          <button key={s} className={`crm-pipeline-tab${filter === s ? ' active' : ''}`} onClick={() => setFilter(s)}>
-            {s === 'all' ? 'All' : s.replace('_', ' ')}
+          <button
+            key={s}
+            className={`crm-tab-btn${filter === s ? ' active' : ''}`}
+            onClick={() => setFilter(s)}
+          >
+            {s === 'all' ? 'All Leads' : s.replace(/_/g, ' ')}
           </button>
         ))}
       </div>
@@ -93,32 +97,43 @@ export default function CrmLeads() {
         {loading ? (
           <div className="admin-spinner" />
         ) : leads.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.3)', textAlign: 'center', padding: '40px 0' }}>
-            No leads found. <Link to="/admin/crm/leads/new" style={{ color: '#92D108' }}>Add one</Link>
-          </p>
+          <div className="crm-empty-state">
+            <svg className="crm-empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+            </svg>
+            <p className="crm-empty-state__text">
+              No leads found. <Link to="/admin/crm/leads/new">Add your first lead</Link>
+            </p>
+          </div>
         ) : (
           <div className="admin-table-wrap">
             <table className="admin-table">
               <thead>
-                <tr><th>Name</th><th>Company</th><th>Email</th><th>Source</th><th>Status</th><th>Date</th><th></th></tr>
+                <tr>
+                  <th>Name</th><th>Company</th><th>Email</th><th>Source</th><th>Status</th><th>Date</th><th></th>
+                </tr>
               </thead>
               <tbody>
                 {leads.map(lead => (
                   <tr key={lead.id}>
-                    <td style={{ fontWeight: 600 }}>{lead.name}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)' }}>{lead.company || '—'}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{lead.email}</td>
-                    <td><span className="crm-source-badge">{lead.source.replace(/_/g, ' ')}</span></td>
+                    <td className="admin-table-title">{lead.name}</td>
+                    <td>{lead.company || '—'}</td>
+                    <td style={{ fontSize: 12 }}>{lead.email}</td>
                     <td>
-                      <span className="crm-status-badge" style={{ background: STATUS_COLORS[lead.status] + '22', color: STATUS_COLORS[lead.status], borderColor: STATUS_COLORS[lead.status] + '44' }}>
-                        {lead.status.replace('_', ' ')}
+                      <span className={`crm-source-badge crm-source--${lead.source}`}>
+                        {lead.source.replace(/_/g, ' ')}
                       </span>
                     </td>
-                    <td style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>{new Date(lead.created_at).toLocaleDateString('en-IN')}</td>
                     <td>
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <Link to={`/admin/crm/leads/${lead.id}`} className="admin-btn-secondary" style={{ padding: '4px 10px', fontSize: 12 }}>Edit</Link>
-                        <button className="admin-btn-danger" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => handleDelete(lead.id)}>Delete</button>
+                      <span className={`crm-status-badge crm-status--${lead.status}`}>
+                        {lead.status.replace(/_/g, ' ')}
+                      </span>
+                    </td>
+                    <td style={{ fontSize: 12 }}>{new Date(lead.created_at).toLocaleDateString('en-IN')}</td>
+                    <td>
+                      <div className="admin-table-actions">
+                        <Link to={`/admin/crm/leads/${lead.id}`} className="admin-action-btn">Edit</Link>
+                        <button className="admin-action-btn admin-action-btn--danger" onClick={() => handleDelete(lead.id)}>Delete</button>
                       </div>
                     </td>
                   </tr>
@@ -131,18 +146,21 @@ export default function CrmLeads() {
 
       {/* CSV Import Modal */}
       {csvModal && (
-        <div className="crm-modal-overlay" onClick={() => setCsvModal(false)}>
-          <div className="crm-modal" onClick={e => e.stopPropagation()}>
-            <h3 style={{ margin: '0 0 16px', color: '#e4e4e7' }}>Import Leads from CSV</h3>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginBottom: 16 }}>
-              CSV must have columns: <strong>name</strong>, <strong>email</strong> (optional: phone, company, message)
-            </p>
+        <div className="admin-modal-overlay" onClick={() => setCsvModal(false)}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal__title">Import Leads from CSV</div>
+            <div className="admin-modal__body">
+              CSV must include columns: <strong>name</strong>, <strong>email</strong>
+              <br />Optional: phone, company, message
+            </div>
             <input ref={fileRef} type="file" accept=".csv" onChange={handleCsvFile} className="admin-input" style={{ marginBottom: 12 }} />
-            {csvError && <p style={{ color: '#ef4444', fontSize: 13, marginBottom: 12 }}>{csvError}</p>}
+            {csvError && <div className="admin-error">{csvError}</div>}
             {csvRows.length > 0 && (
-              <p style={{ color: '#92D108', fontSize: 14, marginBottom: 16 }}>✓ {csvRows.length} leads ready to import</p>
+              <p style={{ color: 'var(--green)', fontSize: 13, marginBottom: 16, fontWeight: 600 }}>
+                ✓ {csvRows.length} leads ready to import
+              </p>
             )}
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+            <div className="admin-modal__actions">
               <button className="admin-btn-secondary" onClick={() => setCsvModal(false)}>Cancel</button>
               <button className="admin-btn-primary" onClick={handleImport} disabled={csvRows.length === 0 || importing}>
                 {importing ? 'Importing…' : `Import ${csvRows.length} Leads`}

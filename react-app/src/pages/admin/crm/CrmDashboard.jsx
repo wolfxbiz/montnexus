@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 
-const CURRENCY_SYMBOLS = { INR: '₹', AED: 'AED ', USD: '$', EUR: '€' };
-
 export default function CrmDashboard() {
   const [stats, setStats] = useState({ leads: 0, newLeads: 0, clients: 0, unpaidTotal: 0 });
   const [recentLeads, setRecentLeads] = useState([]);
@@ -11,9 +9,7 @@ export default function CrmDashboard() {
 
   useEffect(() => {
     async function load() {
-      const now = new Date();
-      const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
-
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
       const [
         { count: leads },
         { count: newLeads },
@@ -27,7 +23,6 @@ export default function CrmDashboard() {
         supabase.from('crm_invoices').select('total, currency').in('status', ['sent', 'overdue']),
         supabase.from('crm_leads').select('*').order('created_at', { ascending: false }).limit(6),
       ]);
-
       const unpaidTotal = (unpaidInvoices || []).reduce((s, i) => s + Number(i.total), 0);
       setStats({ leads: leads || 0, newLeads: newLeads || 0, clients: clients || 0, unpaidTotal });
       setRecentLeads(recent || []);
@@ -36,14 +31,12 @@ export default function CrmDashboard() {
     load();
   }, []);
 
-  const STATUS_COLORS = { new: '#3b82f6', contacted: '#eab308', qualified: '#a855f7', proposal_sent: '#f97316', won: '#92D108', lost: '#71717a' };
-
   if (loading) return <div className="admin-content"><div className="admin-spinner" /></div>;
 
   return (
     <div className="admin-content">
       <div className="admin-topbar">
-        <h1 className="admin-topbar-title">CRM Dashboard</h1>
+        <h1 className="admin-topbar__title">CRM Dashboard</h1>
         <div style={{ display: 'flex', gap: 10 }}>
           <Link to="/admin/crm/leads/new" className="admin-btn-secondary">+ Add Lead</Link>
           <Link to="/admin/crm/invoices/new" className="admin-btn-primary">+ New Invoice</Link>
@@ -53,44 +46,63 @@ export default function CrmDashboard() {
       {/* Stats */}
       <div className="crm-stats-row">
         <div className="crm-stat-card">
-          <div className="crm-stat-card__value">{stats.leads}</div>
-          <div className="crm-stat-card__label">Total Leads</div>
+          <div className="crm-stat-label">Total Leads</div>
+          <div className="crm-stat-value">{stats.leads}</div>
         </div>
         <div className="crm-stat-card">
-          <div className="crm-stat-card__value" style={{ color: '#92D108' }}>{stats.newLeads}</div>
-          <div className="crm-stat-card__label">New This Week</div>
+          <div className="crm-stat-label">New This Week</div>
+          <div className="crm-stat-value" style={{ color: 'var(--green)' }}>{stats.newLeads}</div>
         </div>
         <div className="crm-stat-card">
-          <div className="crm-stat-card__value">{stats.clients}</div>
-          <div className="crm-stat-card__label">Active Clients</div>
+          <div className="crm-stat-label">Active Clients</div>
+          <div className="crm-stat-value">{stats.clients}</div>
         </div>
         <div className="crm-stat-card">
-          <div className="crm-stat-card__value">₹{stats.unpaidTotal.toLocaleString('en-IN')}</div>
-          <div className="crm-stat-card__label">Unpaid Invoices</div>
+          <div className="crm-stat-label">Unpaid Invoices</div>
+          <div className="crm-stat-value" style={{ fontSize: 24 }}>₹{stats.unpaidTotal.toLocaleString('en-IN')}</div>
         </div>
       </div>
 
       {/* Recent Leads */}
-      <div className="admin-editor-panel" style={{ marginTop: 24 }}>
+      <div className="admin-editor-panel">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 700, color: '#e4e4e7', margin: 0 }}>Recent Leads</h2>
-          <Link to="/admin/crm/leads" style={{ fontSize: 13, color: '#92D108' }}>View All →</Link>
+          <span className="admin-editor-panel__title" style={{ marginBottom: 0 }}>Recent Leads</span>
+          <Link to="/admin/crm/leads" style={{ fontSize: 12, color: 'var(--green)', textDecoration: 'none', fontWeight: 600 }}>View All →</Link>
         </div>
         {recentLeads.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>No leads yet. <Link to="/admin/crm/leads/new" style={{ color: '#92D108' }}>Add your first lead</Link></p>
+          <div className="crm-empty-state">
+            <svg className="crm-empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+            </svg>
+            <p className="crm-empty-state__text">No leads yet. <Link to="/admin/crm/leads/new">Add your first lead</Link></p>
+          </div>
         ) : (
           <div className="admin-table-wrap">
             <table className="admin-table">
-              <thead><tr><th>Name</th><th>Company</th><th>Source</th><th>Status</th><th>Date</th><th></th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Name</th><th>Company</th><th>Source</th><th>Status</th><th>Date</th><th></th>
+                </tr>
+              </thead>
               <tbody>
                 {recentLeads.map(lead => (
                   <tr key={lead.id}>
-                    <td style={{ fontWeight: 600 }}>{lead.name}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)' }}>{lead.company || '—'}</td>
-                    <td><span className="crm-source-badge">{lead.source.replace('_', ' ')}</span></td>
-                    <td><span className="crm-status-badge" style={{ background: STATUS_COLORS[lead.status] + '22', color: STATUS_COLORS[lead.status], borderColor: STATUS_COLORS[lead.status] + '44' }}>{lead.status.replace('_', ' ')}</span></td>
-                    <td style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>{new Date(lead.created_at).toLocaleDateString('en-IN')}</td>
-                    <td><Link to={`/admin/crm/leads/${lead.id}`} className="admin-btn-secondary" style={{ padding: '4px 12px', fontSize: 12 }}>View</Link></td>
+                    <td className="admin-table-title">{lead.name}</td>
+                    <td>{lead.company || '—'}</td>
+                    <td>
+                      <span className={`crm-source-badge crm-source--${lead.source}`}>
+                        {lead.source.replace(/_/g, ' ')}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`crm-status-badge crm-status--${lead.status}`}>
+                        {lead.status.replace(/_/g, ' ')}
+                      </span>
+                    </td>
+                    <td style={{ fontSize: 12 }}>{new Date(lead.created_at).toLocaleDateString('en-IN')}</td>
+                    <td>
+                      <Link to={`/admin/crm/leads/${lead.id}`} className="admin-action-btn">View</Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -101,21 +113,45 @@ export default function CrmDashboard() {
 
       {/* Quick Actions */}
       <div className="crm-quick-actions">
-        <Link to="/admin/crm/proposals/new" className="crm-quick-card">
-          <span className="crm-quick-card__icon">📄</span>
-          <span className="crm-quick-card__label">New Proposal</span>
+        <Link to="/admin/crm/proposals/new" className="crm-quick-action">
+          <div className="crm-quick-action__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd"/>
+            </svg>
+          </div>
+          <div className="crm-quick-action__label">New Proposal</div>
+          <div className="crm-quick-action__desc">Draft a proposal for a lead or client</div>
         </Link>
-        <Link to="/admin/crm/invoices/new" className="crm-quick-card">
-          <span className="crm-quick-card__icon">🧾</span>
-          <span className="crm-quick-card__label">New Invoice</span>
+
+        <Link to="/admin/crm/invoices/new" className="crm-quick-action">
+          <div className="crm-quick-action__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd"/>
+            </svg>
+          </div>
+          <div className="crm-quick-action__label">New Invoice</div>
+          <div className="crm-quick-action__desc">Create and send an invoice</div>
         </Link>
-        <Link to="/admin/crm/campaigns/new" className="crm-quick-card">
-          <span className="crm-quick-card__icon">✉️</span>
-          <span className="crm-quick-card__label">New Campaign</span>
+
+        <Link to="/admin/crm/campaigns/new" className="crm-quick-action">
+          <div className="crm-quick-action__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+            </svg>
+          </div>
+          <div className="crm-quick-action__label">New Campaign</div>
+          <div className="crm-quick-action__desc">Send an email to leads or clients</div>
         </Link>
-        <Link to="/admin/crm/clients/new" className="crm-quick-card">
-          <span className="crm-quick-card__icon">👤</span>
-          <span className="crm-quick-card__label">Add Client</span>
+
+        <Link to="/admin/crm/clients/new" className="crm-quick-action">
+          <div className="crm-quick-action__icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>
+            </svg>
+          </div>
+          <div className="crm-quick-action__label">Add Client</div>
+          <div className="crm-quick-action__desc">Convert a lead or add a new client</div>
         </Link>
       </div>
     </div>

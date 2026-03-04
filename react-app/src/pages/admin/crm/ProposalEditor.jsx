@@ -127,11 +127,9 @@ export default function ProposalEditor() {
       <div className="admin-topbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link to="/admin/crm/proposals" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>← Proposals</Link>
-          <h1 className="admin-topbar-title">{isNew ? 'New Proposal' : (form.title || 'Edit Proposal')}</h1>
+          <h1 className="admin-topbar__title">{isNew ? 'New Proposal' : (form.title || 'Edit Proposal')}</h1>
           {!isNew && (
-            <span className="crm-status-badge" style={{ background: STATUS_COLORS[form.status] + '22', color: STATUS_COLORS[form.status], borderColor: STATUS_COLORS[form.status] + '44' }}>
-              {form.status}
-            </span>
+            <span className={`crm-status-badge crm-status--${form.status}`}>{form.status}</span>
           )}
         </div>
         <div style={{ display: 'flex', gap: 10 }}>

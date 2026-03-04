@@ -74,7 +74,7 @@ export default function LeadEditor() {
       <div className="admin-topbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link to="/admin/crm/leads" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>← Leads</Link>
-          <h1 className="admin-topbar-title">{isNew ? 'New Lead' : (form.name || 'Edit Lead')}</h1>
+          <h1 className="admin-topbar__title">{isNew ? 'New Lead' : (form.name || 'Edit Lead')}</h1>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           {!isNew && lead?.status === 'won' && (
@@ -158,13 +158,13 @@ export default function LeadEditor() {
               </div>
               <div className="crm-activity-log" style={{ marginTop: 16 }}>
                 {activities.length === 0 ? (
-                  <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>No activity yet.</p>
+                  <p style={{ color: 'var(--admin-text-ghost)', fontSize: 13 }}>No activity yet.</p>
                 ) : activities.map(a => (
                   <div key={a.id} className="crm-activity-item">
-                    <span className="crm-activity-icon">{ACTIVITY_ICONS[a.type] || '📌'}</span>
-                    <div className="crm-activity-body">
-                      <p className="crm-activity-content">{a.content}</p>
-                      <span className="crm-activity-time">{new Date(a.created_at).toLocaleString('en-IN')}</span>
+                    <div className="crm-activity-dot">{ACTIVITY_ICONS[a.type] || '·'}</div>
+                    <div className="crm-activity-content">
+                      <div className="crm-activity-text">{a.content}</div>
+                      <div className="crm-activity-meta">{new Date(a.created_at).toLocaleString('en-IN')}</div>
                     </div>
                   </div>
                 ))}

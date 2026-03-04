@@ -48,6 +48,16 @@
     </script>
   </head>
   <body>
+    <!-- Apply admin theme before React renders to prevent flash -->
+    <script>
+      (function(){
+        var p = localStorage.getItem('admin-theme') || 'dark';
+        var r = p === 'system'
+          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : p;
+        document.documentElement.setAttribute('data-admin-theme', r);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

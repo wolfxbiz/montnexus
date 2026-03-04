@@ -8,14 +8,14 @@ export default function CrmClients() {
   useEffect(() => { fetchClients(); }, []);
 
   function handleDelete(id) {
-    if (!confirm('Delete this client? This will also block deletion of associated invoices.')) return;
+    if (!confirm('Delete this client? Associated invoices will be unlinked.')) return;
     deleteClient(id).catch(err => alert(err.message));
   }
 
   return (
     <div className="admin-content">
       <div className="admin-topbar">
-        <h1 className="admin-topbar-title">Clients</h1>
+        <h1 className="admin-topbar__title">Clients</h1>
         <Link to="/admin/crm/clients/new" className="admin-btn-primary">+ New Client</Link>
       </div>
 
@@ -23,28 +23,33 @@ export default function CrmClients() {
         {loading ? (
           <div className="admin-spinner" />
         ) : clients.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.3)', textAlign: 'center', padding: '40px 0' }}>
-            No clients yet. <Link to="/admin/crm/clients/new" style={{ color: '#92D108' }}>Add your first client</Link>
-          </p>
+          <div className="crm-empty-state">
+            <svg className="crm-empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0"/>
+            </svg>
+            <p className="crm-empty-state__text">No clients yet. <Link to="/admin/crm/clients/new">Add your first client</Link></p>
+          </div>
         ) : (
           <div className="admin-table-wrap">
             <table className="admin-table">
               <thead>
-                <tr><th>Name</th><th>Company</th><th>Email</th><th>Country</th><th>Proposals</th><th>Invoices</th><th></th></tr>
+                <tr>
+                  <th>Name</th><th>Company</th><th>Email</th><th>Country</th><th>Proposals</th><th>Invoices</th><th></th>
+                </tr>
               </thead>
               <tbody>
                 {clients.map(client => (
                   <tr key={client.id}>
-                    <td style={{ fontWeight: 600 }}>{client.name}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)' }}>{client.company || '—'}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>{client.email}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>{client.country || '—'}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)' }}>{(client.crm_proposals || []).length}</td>
-                    <td style={{ color: 'rgba(255,255,255,0.5)' }}>{(client.crm_invoices || []).length}</td>
+                    <td className="admin-table-title">{client.name}</td>
+                    <td>{client.company || '—'}</td>
+                    <td style={{ fontSize: 12 }}>{client.email}</td>
+                    <td>{client.country || '—'}</td>
+                    <td>{(client.crm_proposals || []).length}</td>
+                    <td>{(client.crm_invoices || []).length}</td>
                     <td>
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <Link to={`/admin/crm/clients/${client.id}`} className="admin-btn-secondary" style={{ padding: '4px 10px', fontSize: 12 }}>Edit</Link>
-                        <button className="admin-btn-danger" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => handleDelete(client.id)}>Delete</button>
+                      <div className="admin-table-actions">
+                        <Link to={`/admin/crm/clients/${client.id}`} className="admin-action-btn">Edit</Link>
+                        <button className="admin-action-btn admin-action-btn--danger" onClick={() => handleDelete(client.id)}>Delete</button>
                       </div>
                     </td>
                   </tr>

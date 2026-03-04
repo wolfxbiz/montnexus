@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useAdminTheme } from '../../hooks/useAdminTheme';
 import '../../styles/Admin.css';
 
 function LayoutIcon({ name }) {
@@ -73,16 +74,31 @@ function LayoutIcon({ name }) {
         <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"/>
       </svg>
     ),
+    sun: (
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd"/>
+      </svg>
+    ),
+    moon: (
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+      </svg>
+    ),
+    monitor: (
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd"/>
+      </svg>
+    ),
   };
   return icons[name] || null;
 }
 
 export default function AdminLayout() {
   const { user, loading, signOut } = useAuth();
+  const { preference, setTheme } = useAdminTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // If on login page, don't enforce auth check
   const isLoginPage = location.pathname === '/admin/login';
 
   useEffect(() => {
@@ -91,7 +107,6 @@ export default function AdminLayout() {
     }
   }, [user, loading, isLoginPage, navigate]);
 
-  // Render login page directly without the layout chrome
   if (isLoginPage) {
     return <Outlet />;
   }
@@ -99,7 +114,7 @@ export default function AdminLayout() {
   if (loading) {
     return (
       <div className="admin-root" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-        <div style={{ width: 36, height: 36, border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#92D108', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <div className="admin-spinner" />
       </div>
     );
   }
@@ -202,7 +217,32 @@ export default function AdminLayout() {
           </a>
         </nav>
 
-        <div className="admin-sidebar__logout">
+        <div className="admin-sidebar__footer">
+          {/* Theme toggle */}
+          <div className="admin-theme-toggle" title="Theme">
+            <button
+              className={`admin-theme-btn${preference === 'light' ? ' active' : ''}`}
+              onClick={() => setTheme('light')}
+              title="Light"
+            >
+              <LayoutIcon name="sun" />
+            </button>
+            <button
+              className={`admin-theme-btn${preference === 'system' ? ' active' : ''}`}
+              onClick={() => setTheme('system')}
+              title="System"
+            >
+              <LayoutIcon name="monitor" />
+            </button>
+            <button
+              className={`admin-theme-btn${preference === 'dark' ? ' active' : ''}`}
+              onClick={() => setTheme('dark')}
+              title="Dark"
+            >
+              <LayoutIcon name="moon" />
+            </button>
+          </div>
+
           <button className="admin-btn-secondary" style={{ width: '100%' }} onClick={handleLogout}>
             Sign Out
           </button>
