@@ -46,7 +46,7 @@ function NavItem({ to, icon, children, end = false, onClick }) {
 export default function AdminLayout() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { preference, setTheme } = useAdminTheme();
-  const { can, isSuperAdmin, loading: roleLoading } = useRole();
+  const { role, can, isSuperAdmin, loading: roleLoading } = useRole();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -103,7 +103,7 @@ export default function AdminLayout() {
 
         <div className="admin-sidebar__logo">
           MNX
-          <span>Content Manager</span>
+          <span>{{ super_admin: 'Super Admin', admin: 'Admin', crm_manager: 'CRM Manager', content_manager: 'Content Manager' }[role] || 'Admin'}</span>
         </div>
 
         <nav className="admin-nav">

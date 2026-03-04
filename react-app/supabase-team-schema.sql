@@ -26,12 +26,11 @@ RETURNS text LANGUAGE sql SECURITY DEFINER STABLE AS $$
 $$;
 
 -- ── 3. RLS for team_members ───────────────────────────────────────────────
--- Any active team member can read the list
+-- Use get_my_role() (SECURITY DEFINER) to avoid recursive RLS on this table
 DROP POLICY IF EXISTS "team read" ON public.team_members;
 CREATE POLICY "team read" ON public.team_members
   FOR SELECT USING (
-    auth.uid() IS NOT NULL
-    AND (SELECT status FROM public.team_members WHERE user_id = auth.uid()) = 'active'
+    public.get_my_role() IS NOT NULL
   );
 
 -- Only super_admin can insert / update / delete
