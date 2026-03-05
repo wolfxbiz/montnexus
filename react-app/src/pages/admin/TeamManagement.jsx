@@ -47,7 +47,7 @@ export default function TeamManagement() {
   useEffect(() => { fetchMembers(); }, []);
 
   // Redirect non-super-admins
-  if (!roleLoading && !isSuperAdmin) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !isSuperAdmin) return <Navigate to="/admin/posts" replace />;
 
   async function handleInvite(e) {
     e.preventDefault();

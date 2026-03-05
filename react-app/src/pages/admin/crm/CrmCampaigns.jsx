@@ -6,7 +6,7 @@ import { useRole } from '../../../hooks/useRole';
 export default function CrmCampaigns() {
   const { can, loading: roleLoading } = useRole();
   const { campaigns, loading, fetchCampaigns, deleteCampaign } = useCampaigns();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => { fetchCampaigns(); }, []);
 

@@ -8,7 +8,7 @@ const CURRENCY_SYMBOLS = { INR: '₹', AED: 'AED ', USD: '$', EUR: '€' };
 export default function CrmProposals() {
   const { can, loading: roleLoading } = useRole();
   const { proposals, loading, fetchProposals, deleteProposal } = useProposals();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => { fetchProposals(); }, []);
 

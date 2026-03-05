@@ -35,7 +35,7 @@ export default function AdminSettings() {
   const [local, setLocal] = useState({});
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
-  if (!roleLoading && !can('settings')) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !can('settings')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => {
     if (!loading) setLocal({ ...settings });

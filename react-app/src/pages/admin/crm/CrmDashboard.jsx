@@ -8,7 +8,7 @@ export default function CrmDashboard() {
   const [stats, setStats] = useState({ leads: 0, newLeads: 0, clients: 0, unpaidTotal: 0 });
   const [recentLeads, setRecentLeads] = useState([]);
   const [loading, setLoading] = useState(true);
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => {
     async function load() {

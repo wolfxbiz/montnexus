@@ -9,7 +9,8 @@ export default function AdminDashboard() {
   const { posts, loading, error, deletePost } = usePosts();
   const navigate = useNavigate();
   const [deletingId, setDeletingId] = useState(null);
-  if (!roleLoading && !can('content')) return <Navigate to="/admin/crm" replace />;
+  if (!roleLoading && !can('content') && can('crm')) return <Navigate to="/admin/crm" replace />;
+  if (!roleLoading && !can('content') && !can('crm')) return <Navigate to="/admin/pages" replace />;
 
   const total = posts.length;
   const published = posts.filter(p => p.status === 'published').length;

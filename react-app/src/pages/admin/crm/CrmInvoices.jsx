@@ -12,7 +12,7 @@ function isOverdue(inv) {
 export default function CrmInvoices() {
   const { can, loading: roleLoading } = useRole();
   const { invoices, loading, fetchInvoices, deleteInvoice } = useInvoices();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => { fetchInvoices(); }, []);
 

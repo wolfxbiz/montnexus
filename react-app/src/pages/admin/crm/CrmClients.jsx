@@ -6,7 +6,7 @@ import { useRole } from '../../../hooks/useRole';
 export default function CrmClients() {
   const { can, loading: roleLoading } = useRole();
   const { clients, loading, fetchClients, deleteClient } = useClients();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin" replace />;
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => { fetchClients(); }, []);
 
