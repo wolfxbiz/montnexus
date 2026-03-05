@@ -21,16 +21,14 @@ export function useRole() {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase
-      .from('team_members')
-      .select('role, status')
-      .eq('user_id', user.id)
-      .single();
-    if (error) {
-      // Table not found OR user not in team_members yet — grant full access
+    // Use RPC to call get_my_role() — SECURITY DEFINER bypasses team_members RLS entirely
+    const { data: roleData, error } = await supabase.rpc('get_my_role');
+    console.log('[useRole] user:', user?.id, 'rpc result:', roleData, 'error:', error);
+    if (error || roleData === null || roleData === undefined) {
+      // Function missing, table missing, or user not yet in team_members → full access
       setRole('super_admin');
     } else {
-      setRole(data?.status === 'active' ? data.role : null);
+      setRole(roleData);
     }
     setLoading(false);
   }, [user]);
