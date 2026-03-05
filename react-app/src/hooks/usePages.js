@@ -58,11 +58,15 @@ export function usePages({ slug, id } = {}) {
       setLoading(false);
       return null;
     }
-    const { data: sectionData } = await supabase
+    const { data: sectionData, error: sectionErr } = await supabase
       .from('page_sections')
       .select('*')
       .eq('page_id', pageData.id)
       .order('display_order', { ascending: true });
+    if (sectionErr) {
+      console.error('[usePages] page_sections query error:', sectionErr.code, sectionErr.message);
+      setError('Could not load sections: ' + sectionErr.message);
+    }
     setPage(pageData);
     setSections(sectionData || []);
     setLoading(false);
