@@ -8,9 +8,13 @@ const CURRENCY_SYMBOLS = { INR: '₹', AED: 'AED ', USD: '$', EUR: '€' };
 export default function CrmProposals() {
   const { can, loading: roleLoading } = useRole();
   const { proposals, loading, fetchProposals, deleteProposal } = useProposals();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
-  useEffect(() => { fetchProposals(); }, []);
+  useEffect(() => {
+    if (roleLoading || !can('crm')) return;
+    fetchProposals();
+  }, [roleLoading, can]);
+
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   function handleDelete(id) {
     if (!confirm('Delete this proposal?')) return;

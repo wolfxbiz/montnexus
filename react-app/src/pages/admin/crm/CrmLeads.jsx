@@ -10,7 +10,6 @@ const REQUIRED_CSV_COLS = ['name', 'email'];
 export default function CrmLeads() {
   const { can, loading: roleLoading } = useRole();
   const { leads, loading, fetchLeads, deleteLead, bulkCreateLeads } = useLeads();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
   const [filter, setFilter] = useState('all');
   const [csvModal, setCsvModal] = useState(false);
   const [csvRows, setCsvRows] = useState([]);
@@ -18,7 +17,12 @@ export default function CrmLeads() {
   const [importing, setImporting] = useState(false);
   const fileRef = useRef();
 
-  useEffect(() => { fetchLeads(filter); }, [filter]);
+  useEffect(() => {
+    if (roleLoading || !can('crm')) return;
+    fetchLeads(filter);
+  }, [filter, roleLoading, can]);
+
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   function handleDelete(id) {
     if (!confirm('Delete this lead?')) return;

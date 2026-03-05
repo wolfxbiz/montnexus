@@ -6,9 +6,13 @@ import { useRole } from '../../../hooks/useRole';
 export default function CrmClients() {
   const { can, loading: roleLoading } = useRole();
   const { clients, loading, fetchClients, deleteClient } = useClients();
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
-  useEffect(() => { fetchClients(); }, []);
+  useEffect(() => {
+    if (roleLoading || !can('crm')) return;
+    fetchClients();
+  }, [roleLoading, can]);
+
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   function handleDelete(id) {
     if (!confirm('Delete this client? Associated invoices will be unlinked.')) return;

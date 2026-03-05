@@ -8,9 +8,9 @@ export default function CrmDashboard() {
   const [stats, setStats] = useState({ leads: 0, newLeads: 0, clients: 0, unpaidTotal: 0 });
   const [recentLeads, setRecentLeads] = useState([]);
   const [loading, setLoading] = useState(true);
-  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   useEffect(() => {
+    if (roleLoading || !can('crm')) return;
     async function load() {
       const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
       const [
@@ -32,7 +32,9 @@ export default function CrmDashboard() {
       setLoading(false);
     }
     load();
-  }, []);
+  }, [roleLoading, can]);
+
+  if (!roleLoading && !can('crm')) return <Navigate to="/admin/posts" replace />;
 
   if (loading) return <div className="admin-content"><div className="admin-spinner" /></div>;
 
