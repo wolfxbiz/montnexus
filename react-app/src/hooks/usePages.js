@@ -53,7 +53,7 @@ export function usePages({ slug, id } = {}) {
       .select('*')
       .eq('id', pageId)
       .single();
-    if (pageErr || !pageData) {
+    if (pageErr || !pageData || !pageData.id) {
       setError(pageErr?.message || 'Page not found');
       setLoading(false);
       return null;
